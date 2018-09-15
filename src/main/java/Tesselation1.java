@@ -7,7 +7,7 @@ public class Tesselation1 extends PApplet {
     private static final String NAME = "Tesselation1";
     private static final int CELL_SIZE = 15;
     private static final int HALF_CELL_SIZE = CELL_SIZE / 2;
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
+    private static final int OUTPUT_WIDTH = 2200, OUTPUT_HEIGHT = 2900;
 
     private PImage img;
     private Random r = new Random();
@@ -20,7 +20,7 @@ public class Tesselation1 extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("image1.jpg");
+        img = loadImage("monalisa.jpg");
         size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
         pixelDensity(1);
         smooth(8);
@@ -34,9 +34,9 @@ public class Tesselation1 extends PApplet {
         srcScaleY = (float) img.height / OUTPUT_HEIGHT;
 
         background(0);
-        noStroke();
-        //stroke(0);
-        //strokeWeight(1);
+        //noStroke();
+        stroke(128);
+        strokeWeight(1);
 
         for (int x = 0; x < OUTPUT_WIDTH; x += CELL_SIZE) {
             for (int y = 0; y < OUTPUT_HEIGHT; y += CELL_SIZE) {

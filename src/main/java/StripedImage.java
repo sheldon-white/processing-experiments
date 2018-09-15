@@ -3,8 +3,8 @@ import processing.core.PImage;
 import java.util.Random;
 
 public class StripedImage extends PApplet {
-    private static final String NAME = "Tesselation1";
-    private static final int STRIPE_WIDTH = 8;
+    private static final String NAME = "StripedImage";
+    private static final int STRIPE_WIDTH = 10;
 
     private PImage img;
     private int xcount;
@@ -19,7 +19,7 @@ public class StripedImage extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("image1.jpg");
+        img = loadImage("monalisa.jpg");
         size(img.width, img.height);
         pixelDensity(1);
         smooth(8);

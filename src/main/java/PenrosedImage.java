@@ -17,7 +17,7 @@ public class PenrosedImage extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("image1.jpg");
+        img = loadImage("monalisa.jpg");
         penroseSize = 2 * Math.max(img.width, img.height);
         size(img.width, img.height);
         Random r = new Random();
