@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PenrosedImage extends PApplet {
-    private boolean drawBorders = true;
-    private float goldenRatio = (1 + sqrt(5)) / 2;
-    private PImage img;
+    private static final String NAME = "PenrosedImage";
+    private static final float GOLDEN_RATIO = (1 + sqrt(5)) / 2;
     private int imgOffsetX, imgOffsetY, penroseSize;
+
+    private PImage img;
+
     public static void main(String args[]) {
-        PApplet.main("PenrosedImage");
+        PApplet.main(NAME);
     }
 
     @Override
     public void settings() {
-        img = loadImage("image2.jpg");
+        img = loadImage("image1.jpg");
         penroseSize = 2 * Math.max(img.width, img.height);
         size(img.width, img.height);
         Random r = new Random();
@@ -47,7 +49,7 @@ public class PenrosedImage extends PApplet {
                 t.draw();
             }
         });
-        save("penrose.png");
+        save(NAME + ".png");
         print("Done!\n");
         noLoop();
     }
@@ -60,13 +62,13 @@ public class PenrosedImage extends PApplet {
         Point c = initialTile.c;
 
         if (initialTile.type == 0){
-            Point p = a.plus((b.minus(a)).divide(goldenRatio));
+            Point p = a.plus((b.minus(a)).divide(GOLDEN_RATIO));
 
             newTiles.add(new Tile(0, c, p, b));
             newTiles.add(new Tile(1, p, c, a));
         } else {
-            Point q = b.plus((a.minus(b)).divide(goldenRatio));
-            Point r = b.plus((c.minus(b)).divide(goldenRatio));
+            Point q = b.plus((a.minus(b)).divide(GOLDEN_RATIO));
+            Point r = b.plus((c.minus(b)).divide(GOLDEN_RATIO));
 
             newTiles.add(new Tile(1, r, c, a));
             newTiles.add(new Tile(1, q, r, b));
@@ -144,6 +146,7 @@ public class PenrosedImage extends PApplet {
             int color = img.get((int)middle.x, (int)middle.y);
             fill(color);
 
+            boolean drawBorders = true;
             if (drawBorders) {
                 stroke(0, 0, 0, 100);
             } else {
