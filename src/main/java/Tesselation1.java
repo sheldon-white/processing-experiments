@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Tesselation1 extends PApplet {
     private static final String NAME = "Tesselation1";
-    private static final int CELL_SIZE = 15;
+    private static final int CELL_SIZE = 100;
     private static final int HALF_CELL_SIZE = CELL_SIZE / 2;
     private static final int OUTPUT_WIDTH = 2200, OUTPUT_HEIGHT = 2900;
 
@@ -102,38 +102,11 @@ public class Tesselation1 extends PApplet {
         Point tc = t.centroidCenter();
         int c = img.get((int)(srcScaleX * tc.x), (int)(srcScaleY * tc.y));
         fill(c);
-        t.draw();
+        drawTriangle(t);
     }
 
-    static class Point {
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        int x;
-        int y;
-    }
-
-    static class Triangle {
-        Triangle(Point p0, Point p1, Point p2) {
-            this.p0 = p0;
-            this.p1 = p1;
-            this.p2 = p2;
-        }
-
-        Point p0;
-        Point p1;
-        Point p2;
-
-        Point centroidCenter() {
-            int cx = ((p0.x + p1.x + p2.x) / 3);
-            int cy = ((p0.y + p1.y + p2.y) / 3);
-            return new Point(cx, cy);
-        }
-
-        void draw() {
-            context.triangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y);
-        }
+    void drawTriangle(Triangle t) {
+        context.triangle(t.p0.x, t.p0.y, t.p1.x, t.p1.y, t.p2.x, t.p2.y);
     }
 }
 

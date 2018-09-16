@@ -13,8 +13,8 @@ public class ImageBlend3 extends PApplet {
 
     @Override
     public void settings() {
-        img1 = loadImage("image3.jpg");
-        img2 = loadImage("image1.jpg");
+        img1 = loadImage("image1.jpg");
+        img2 = loadImage("image3.jpg");
         size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
         pixelDensity(1);
         smooth(8);
