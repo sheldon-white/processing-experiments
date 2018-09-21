@@ -1,14 +1,12 @@
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
-import org.omg.CORBA.MARSHAL;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 import java.util.List;
 import java.util.Random;
 
-public class QuadtreeTest3 extends PApplet {
-    private static final String NAME = "QuadtreeTest3";
+public class QuadtreeMaze extends PApplet {
+    private static final String NAME = "QuadtreeMaze";
     private static final int CELL_SIZE = 40;
     private static final int CELL_MARGIN = (int)(CELL_SIZE / 8);
 
