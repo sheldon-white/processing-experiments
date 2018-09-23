@@ -13,7 +13,7 @@ public class QuadtreeMaze1 extends PApplet {
     private static final int CELL_SIZE = 40;
     private static final int CELL_MARGIN = (int)(CELL_SIZE / 8);
 
-    private static final int OUTPUT_WIDTH = 1000, OUTPUT_HEIGHT = 800;
+    private static final int OUTPUT_WIDTH = 600, OUTPUT_HEIGHT = 600;
     private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
     private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
 
@@ -30,37 +30,12 @@ public class QuadtreeMaze1 extends PApplet {
     private Set<PathRunner> runners;
     private Stack<MazeCell> solution;
 
-    private class MazeCell extends QuadRectangle {
-        private Set<MazeCell> neighbors;
-        private boolean visited;
-
-        MazeCell(int x, int y, int width, int height) {
-            super(x, y, width, height);
-            neighbors = new HashSet<>();
-        }
-
-        public Set<MazeCell> getNeighbors() {
-            return neighbors;
-        }
-
-        public void setNeighbors(Set<MazeCell> neighbors) {
-            this.neighbors = neighbors;
-        }
-
-        public boolean isVisited() {
-            return visited;
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
-        }
-    }
-
     private class PathRunner {
         PathRunner() {
             path = new Stack<>();
         }
         PathRunner(PathRunner parent) {
+            this();
             parentPath = (Stack<MazeCell>)parent.path.clone();
         }
 
