@@ -6,6 +6,7 @@ import java.util.Set;
 public class MazeCell extends QuadRectangle {
     private Set<MazeCell> neighbors;
     private boolean visited;
+    private MazeCell parent;
 
     MazeCell(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -26,5 +27,13 @@ public class MazeCell extends QuadRectangle {
 
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    public MazeCell getParent() {
+        return parent;
+    }
+
+    public void setParent(MazeCell parent) {
+        this.parent = parent;
     }
 }
