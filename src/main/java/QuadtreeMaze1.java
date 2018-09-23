@@ -13,7 +13,7 @@ public class QuadtreeMaze1 extends PApplet {
     private static final int CELL_SIZE = 40;
     private static final int CELL_MARGIN = (int)(CELL_SIZE / 8);
 
-    private static final int OUTPUT_WIDTH = 3000, OUTPUT_HEIGHT = 2000;
+    private static final int OUTPUT_WIDTH = 3600, OUTPUT_HEIGHT = 2400;
     private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
     private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
 
@@ -114,7 +114,6 @@ public class QuadtreeMaze1 extends PApplet {
             unvisitedNeighbor.setParent(current);
             drawQuad(unvisitedNeighbor, occupiedColor);
             drawQuad(current, visitedColor);
-            // TODO if at the end, set the solution
             if (random.nextFloat() < replicationFrequency) {
                 PathRunner newRunner = new PathRunner(pathRunner);
                 newRunner.place(current);
@@ -156,7 +155,13 @@ public class QuadtreeMaze1 extends PApplet {
     }
 
     private void drawStartAndFinish() {
-
+        drawQuad(start, occupiedColor);
+        drawQuad(finish, occupiedColor);
+        textSize(20);
+        textAlign(CENTER);
+        fill(0);
+        text('S', (float)start.x * CELL_SIZE + CELL_SIZE / 2, (float)start.y * CELL_SIZE + CELL_SIZE / 2 + 4);
+        text('F', (float)finish.x * CELL_SIZE + CELL_SIZE / 2, (float)finish.y * CELL_SIZE + CELL_SIZE / 2 + 4);
     }
 
     private void toggleSolution() {
