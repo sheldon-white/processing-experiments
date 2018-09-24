@@ -53,7 +53,7 @@ public class Curves1 extends PApplet {
             //print("angle: ", angle, " x: ", x, " y: ", y, " px: ", px, " py: ", py, "\n");
             strokeWeight(4);
             points.add(new Point((int)px, (int)py));
-            point(px, py);
+            //point(px, py);
         }
         curveVertex(points.get(0).x, points.get(0).y);
         curveVertex(points.get(1).x, points.get(1).y);

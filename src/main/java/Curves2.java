@@ -38,7 +38,7 @@ public class Curves2 extends PApplet {
         List<Point> curve = randomCurve((int)(CELL_SIZE * 0.45));
         List<Float> deltas = new ArrayList<>();
         for (Point p: curve) {
-            deltas.add((r.nextFloat() - 0.5F) * 2);
+            deltas.add((r.nextFloat() - 0.5F) * 4);
         }
         int color = color(128 + r.nextInt(128), 128 + r.nextInt(128),128 + r.nextInt(128));
         int dr = r.nextInt(10) - 5;
