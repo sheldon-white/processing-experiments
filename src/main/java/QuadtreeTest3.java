@@ -9,12 +9,13 @@ import java.util.Random;
 
 public class QuadtreeTest3 extends PApplet {
     private static final String NAME = "QuadtreeTest3";
-    private static final int CELL_SIZE = 40;
-    private static final int CELL_MARGIN = (int)(CELL_SIZE / 8);
+    private int cellSize = 40;
+    private int cellMargin = (int)(cellSize / 8);
 
-    private static final int OUTPUT_WIDTH = 3000, OUTPUT_HEIGHT = 2000;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
+    private int outputWidth = 3000;
+    private int outputHeight = 2000;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
 
     private Random r = new Random();
     private static PApplet context;
@@ -25,7 +26,7 @@ public class QuadtreeTest3 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -39,18 +40,18 @@ public class QuadtreeTest3 extends PApplet {
         stroke(0);
         strokeWeight(1.5F);
 
-        QuadRectangle bounds = new QuadRectangle(0, 0, XCOUNT, YCOUNT);
-        StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, XCOUNT, YCOUNT), 0, 1, 4);
-        int emptyCells = XCOUNT * YCOUNT;
+        QuadRectangle bounds = new QuadRectangle(0, 0, xcount, ycount);
+        StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
+        int emptyCells = xcount * ycount;
         while (emptyCells > 0) {
-            int x = r.nextInt(XCOUNT);
-            int y = r.nextInt(YCOUNT);
+            int x = r.nextInt(xcount);
+            int y = r.nextInt(ycount);
             int w = 1 + r.nextInt(8);
             int h = 1 + r.nextInt(8);
-            if (x + w > XCOUNT) {
+            if (x + w > xcount) {
                 continue;
             }
-            if (y + h > YCOUNT) {
+            if (y + h > ycount) {
                 continue;
             }
             QuadRectangle q = new QuadRectangle(x, y, w, h);
@@ -87,19 +88,19 @@ public class QuadtreeTest3 extends PApplet {
     }
 
     private void drawQuad(QuadRectangle q) {
-        float x = (float)q.x * CELL_SIZE + CELL_MARGIN;
-        float y = (float)q.y * CELL_SIZE + CELL_MARGIN;
-        float w = (float)q.width * CELL_SIZE - 2 * CELL_MARGIN;
-        float h = (float)q.height * CELL_SIZE - 2 * CELL_MARGIN;
+        float x = (float)q.x * cellSize + cellMargin;
+        float y = (float)q.y * cellSize + cellMargin;
+        float w = (float)q.width * cellSize - 2 * cellMargin;
+        float h = (float)q.height * cellSize - 2 * cellMargin;
         int color = color(128 + r.nextInt(128), 128 + r.nextInt(128),128 + r.nextInt(128));
 
         stroke(80);
         strokeWeight(2);
         fill(color);
         if (q.width == 1 && q.height == 1) {
-            ellipse(x - CELL_MARGIN + CELL_SIZE / 2, y - CELL_MARGIN + CELL_SIZE / 2, w, h);
+            ellipse(x - cellMargin + cellSize / 2, y - cellMargin + cellSize / 2, w, h);
         } else {
-            rect(x, y, w, h, CELL_SIZE / 2 - CELL_MARGIN);
+            rect(x, y, w, h, cellSize / 2 - cellMargin);
         }
     }
 
@@ -136,9 +137,9 @@ public class QuadtreeTest3 extends PApplet {
     private void drawHorizontal(QuadRectangle left, QuadRectangle right) {
         int top = max((int) left.y, (int) right.y);
         int bottom = min((int) (left.y + left.height), (int) (right.y + right.height));
-        int y = CELL_SIZE * (top + bottom) / 2;
-        int x0 = CELL_SIZE * (int) (left.x + left.width) - CELL_MARGIN;
-        int x1 = CELL_SIZE * (int) right.x + CELL_MARGIN;
+        int y = cellSize * (top + bottom) / 2;
+        int x0 = cellSize * (int) (left.x + left.width) - cellMargin;
+        int x1 = cellSize * (int) right.x + cellMargin;
         stroke(100);
         strokeWeight(2);
         line(x0, y, x1, y);
@@ -147,9 +148,9 @@ public class QuadtreeTest3 extends PApplet {
     private void drawVertical(QuadRectangle top, QuadRectangle bottom) {
         int left = max((int) top.x, (int) bottom.x);
         int right = min((int) (top.x + top.width), (int) (bottom.x + bottom.width));
-        int x = CELL_SIZE * (left + right) / 2;
-        int y0 = CELL_SIZE * (int) (top.y + top.height) - CELL_MARGIN;
-        int y1 = CELL_SIZE * (int) bottom.y + CELL_MARGIN;
+        int x = cellSize * (left + right) / 2;
+        int y0 = cellSize * (int) (top.y + top.height) - cellMargin;
+        int y1 = cellSize * (int) bottom.y + cellMargin;
         stroke(100);
         strokeWeight(2);
         line(x, y0, x, y1);

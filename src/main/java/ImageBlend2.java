@@ -3,7 +3,7 @@ import processing.core.PImage;
 
 public class ImageBlend2 extends PApplet {
     private static final String NAME = "ImageBlend2";
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
+    private int outputWidth = 1500, outputHeight = 1000;
 
     private PImage img1, img2;
 
@@ -15,7 +15,7 @@ public class ImageBlend2 extends PApplet {
     public void settings() {
         img1 = loadImage("image1.jpg");
         img2 = loadImage("image3.jpg");
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -24,16 +24,16 @@ public class ImageBlend2 extends PApplet {
     public void draw() {
         background(0);
 
-        float srcScaleX1 = (float)img1.width / OUTPUT_WIDTH;
-        float srcScaleY1 = (float)img1.height / OUTPUT_HEIGHT;
-        float srcScaleX2 = (float)img2.width / OUTPUT_WIDTH;
-        float srcScaleY2 = (float)img2.height / OUTPUT_HEIGHT;
+        float srcScaleX1 = (float)img1.width / outputWidth;
+        float srcScaleY1 = (float)img1.height / outputHeight;
+        float srcScaleX2 = (float)img2.width / outputWidth;
+        float srcScaleY2 = (float)img2.height / outputHeight;
 
-        for (int x = 0; x < OUTPUT_WIDTH; x++) {
-            for (int y = 0; y < OUTPUT_HEIGHT; y++) {
+        for (int x = 0; x < outputWidth; x++) {
+            for (int y = 0; y < outputHeight; y++) {
                 int c1 = img1.get((int)(x * srcScaleX1), (int)(y * srcScaleY1));
                 int c2 = img2.get((int)(x * srcScaleX2), (int)(y * srcScaleY2));
-                int color = lerpColor(c1, c2, (float)(x + y) / (OUTPUT_WIDTH + OUTPUT_HEIGHT));
+                int color = lerpColor(c1, c2, (float)(x + y) / (outputWidth + outputHeight));
                 stroke(color);
                 point(x, y);
             }

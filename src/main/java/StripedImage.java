@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class StripedImage extends PApplet {
     private static final String NAME = "StripedImage";
-    private static final int STRIPE_WIDTH = 10;
+    private int stripeWidth = 10;
 
     private PImage img;
     private int xcount;
@@ -27,14 +27,14 @@ public class StripedImage extends PApplet {
 
     @Override
     public void draw() {
-        xcount = img.width / STRIPE_WIDTH;
-        ycount = img.height / STRIPE_WIDTH;
+        xcount = img.width / stripeWidth;
+        ycount = img.height / stripeWidth;
         imagePoints = new int[xcount][ycount];
         filled = new boolean[xcount][ycount];
         // Loop through the image, collect array of points
         for (int y = 0; y < ycount; y++) {
             for (int x = 0; x < xcount; x++) {
-                int color = img.get(x * STRIPE_WIDTH, y * STRIPE_WIDTH);
+                int color = img.get(x * stripeWidth, y * stripeWidth);
                 imagePoints[x][y] = color;
                 filled[x][y] = false;
             }
@@ -135,10 +135,10 @@ public class StripedImage extends PApplet {
     }
 
     private void paintRect(int color, int x, int y, int w, int h) {
-        int x0 = x * STRIPE_WIDTH;
-        int y0 = y * STRIPE_WIDTH;
-        int width = w * STRIPE_WIDTH;
-        int height = h * STRIPE_WIDTH;
+        int x0 = x * stripeWidth;
+        int y0 = y * stripeWidth;
+        int width = w * stripeWidth;
+        int height = h * stripeWidth;
         fill(color);
         rect(x0, y0, width, height);
 //        textSize(10);
@@ -155,7 +155,7 @@ public class StripedImage extends PApplet {
     }
 
     private double colorDiff(int baseColor, int x, int y) {
-        int color = img.get(x * STRIPE_WIDTH, y * STRIPE_WIDTH);
+        int color = img.get(x * stripeWidth, y * stripeWidth);
         float rDiff = red(baseColor) - red(color);
         float gDiff = green(baseColor) - green(color);
         float bDiff = blue(baseColor) - blue(color);

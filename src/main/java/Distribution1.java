@@ -5,10 +5,10 @@ import java.util.Random;
 
 public class Distribution1 extends PApplet {
     private static final String NAME = "Distribution1";
-    private static final int CELL_SIZE = 60;
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
+    private int cellSize = 60;
+    private int outputWidth = 1500, outputHeight = 1000;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
     private Random r = new Random();
 
     public static void main(String args[]) {
@@ -17,7 +17,7 @@ public class Distribution1 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -29,8 +29,8 @@ public class Distribution1 extends PApplet {
         stroke(0);
         strokeWeight(1);
 
-        for (int y = 0; y < YCOUNT; y++) {
-            for (int x = 0; x < XCOUNT; x++) {
+        for (int y = 0; y < ycount; y++) {
+            for (int x = 0; x < xcount; x++) {
                 drawCell(x, y);
             }
         }
@@ -43,27 +43,27 @@ public class Distribution1 extends PApplet {
     private void drawCell(int x, int y) {
         int ctr = 0;
 
-        if (randomChoice(x, 0, XCOUNT)) {
-            int x0 = x * CELL_SIZE + 10;
-            int y0 = y * CELL_SIZE + 10;
-            int x1 = (x + 1) * CELL_SIZE - 10;
-            int y1 = (y + 1) * CELL_SIZE - 10;
+        if (randomChoice(x, 0, xcount)) {
+            int x0 = x * cellSize + 10;
+            int y0 = y * cellSize + 10;
+            int x1 = (x + 1) * cellSize - 10;
+            int y1 = (y + 1) * cellSize - 10;
             drawLine(x0, y0, x1, y1);
             ctr++;
         }
-        if (randomChoice(y, 0, YCOUNT)) {
-            int x0 = x * CELL_SIZE + 10;
-            int y0 = (y + 1) * CELL_SIZE - 10;
-            int x1 = (x + 1) * CELL_SIZE - 10;
-            int y1 = y * CELL_SIZE + 10;
+        if (randomChoice(y, 0, ycount)) {
+            int x0 = x * cellSize + 10;
+            int y0 = (y + 1) * cellSize - 10;
+            int x1 = (x + 1) * cellSize - 10;
+            int y1 = y * cellSize + 10;
             drawLine(x0, y0, x1, y1);
             ctr++;
         }
         if (ctr == 2) {
             noStroke();
             fill(r.nextInt(255),r.nextInt(255),r.nextInt(255), 40 + r.nextInt(50));
-            float radius = CELL_SIZE * (1 + 2 * r.nextFloat());
-            ellipse(x * CELL_SIZE + CELL_SIZE / 2, y * CELL_SIZE + CELL_SIZE / 2, radius, radius);
+            float radius = cellSize * (1 + 2 * r.nextFloat());
+            ellipse(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, radius, radius);
         }
     }
 

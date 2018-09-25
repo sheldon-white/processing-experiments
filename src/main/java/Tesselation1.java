@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class Tesselation1 extends PApplet {
     private static final String NAME = "Tesselation1";
-    private static final int CELL_SIZE = 100;
-    private static final int HALF_CELL_SIZE = CELL_SIZE / 2;
-    private static final int OUTPUT_WIDTH = 2200, OUTPUT_HEIGHT = 2900;
+    private int cellSize = 100;
+    private int halfCellSize = cellSize / 2;
+    private int outputWidth = 2200, outputHeight = 2900;
 
     private PImage img;
     private Random r = new Random();
@@ -21,7 +21,7 @@ public class Tesselation1 extends PApplet {
     @Override
     public void settings() {
         img = loadImage("monalisa.jpg");
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -30,16 +30,16 @@ public class Tesselation1 extends PApplet {
     public void draw() {
         context = this;
         background(0);
-        srcScaleX = (float) img.width / OUTPUT_WIDTH;
-        srcScaleY = (float) img.height / OUTPUT_HEIGHT;
+        srcScaleX = (float) img.width / outputWidth;
+        srcScaleY = (float) img.height / outputHeight;
 
         background(0);
         //noStroke();
         stroke(128);
         strokeWeight(1);
 
-        for (int x = 0; x < OUTPUT_WIDTH; x += CELL_SIZE) {
-            for (int y = 0; y < OUTPUT_HEIGHT; y += CELL_SIZE) {
+        for (int x = 0; x < outputWidth; x += cellSize) {
+            for (int y = 0; y < outputHeight; y += cellSize) {
                 tesselateSquare(x, y);
             }
         }
@@ -50,15 +50,15 @@ public class Tesselation1 extends PApplet {
 
     private void tesselateSquare(int x, int y) {
         Point ul = new Point(x, y);
-        Point ur = new Point(x + CELL_SIZE, y);
-        Point ll = new Point(x, y + CELL_SIZE);
-        Point lr = new Point(x + CELL_SIZE, y + CELL_SIZE);
-        Point cen = new Point(x + HALF_CELL_SIZE, y + HALF_CELL_SIZE);
+        Point ur = new Point(x + cellSize, y);
+        Point ll = new Point(x, y + cellSize);
+        Point lr = new Point(x + cellSize, y + cellSize);
+        Point cen = new Point(x + halfCellSize, y + halfCellSize);
 
         switch (r.nextInt(8)) {
             case 0:
-                fill(img.get((int)srcScaleX * (x + HALF_CELL_SIZE), (int)srcScaleY * (y + HALF_CELL_SIZE)));
-                rect(x, y, CELL_SIZE, CELL_SIZE);
+                fill(img.get((int)srcScaleX * (x + halfCellSize), (int)srcScaleY * (y + halfCellSize)));
+                rect(x, y, cellSize, cellSize);
                 break;
             case 1:
                 drawTriangle(ul, ur, ll);

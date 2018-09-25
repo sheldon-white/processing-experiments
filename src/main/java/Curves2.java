@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 public class Curves2 extends PApplet {
     private static final String NAME = "Curves2";
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
-    private static final int CELL_SIZE = 80;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
+    private int outputWidth = 1500, outputHeight = 1000;
+    private int cellSize = 80;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
     private Random r = new Random();
     private static PApplet context;
 
@@ -23,7 +23,7 @@ public class Curves2 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -35,7 +35,7 @@ public class Curves2 extends PApplet {
         //noStroke();
         stroke(0);
         strokeWeight(3);
-        List<Point> curve = randomCurve((int)(CELL_SIZE * 0.45));
+        List<Point> curve = randomCurve((int)(cellSize * 0.45));
         List<Float> deltas = new ArrayList<>();
         for (Point p: curve) {
             deltas.add((r.nextFloat() - 0.5F) * 4);
@@ -44,8 +44,8 @@ public class Curves2 extends PApplet {
         int dr = r.nextInt(10) - 5;
         int dg = r.nextInt(10) - 5;
         int db = r.nextInt(10) - 5;
-        for (int x = 0; x < XCOUNT; x++) {
-            for (int y = 0; y < YCOUNT; y++) {
+        for (int x = 0; x < xcount; x++) {
+            for (int y = 0; y < ycount; y++) {
                 placeCurve(x, y, curve, deltas, color, dr, dg, db);
             }
         }
@@ -55,8 +55,8 @@ public class Curves2 extends PApplet {
     }
 
     private void placeCurve(int x, int y, List<Point>curve, List<Float> deltas, int color, int dr, int dg, int db) {
-        int xs = x * CELL_SIZE + CELL_SIZE / 2;
-        int ys = y * CELL_SIZE + CELL_SIZE / 2;
+        int xs = x * cellSize + cellSize / 2;
+        int ys = y * cellSize + cellSize / 2;
         float r = red(color) + x * dr;
         float g = red(color) + y * dg;
         float b = red(color) + (x + y) * db / 2;

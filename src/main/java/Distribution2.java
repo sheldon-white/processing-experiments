@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class Distribution2 extends PApplet {
     private static final String NAME = "Distribution2";
-    private static final int CELL_SIZE = 60;
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
-    private static final int LINE_LENGTH = (int)(CELL_SIZE / 3);
+    private int cellSize = 60;
+    private int outputWidth = 1500, outputHeight = 1000;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
+    private int LINE_LENGTH = (int)(cellSize / 3);
 
     int xh0 = LINE_LENGTH;
     int yh0 = 0;
@@ -23,7 +23,7 @@ public class Distribution2 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -36,8 +36,8 @@ public class Distribution2 extends PApplet {
         stroke(0);
         strokeWeight(1);
 
-        for (int y = 0; y < YCOUNT; y++) {
-            for (int x = 0; x < XCOUNT; x++) {
+        for (int y = 0; y < ycount; y++) {
+            for (int x = 0; x < xcount; x++) {
                 drawCell(x, y);
             }
         }
@@ -49,11 +49,11 @@ public class Distribution2 extends PApplet {
 
     private void drawCell(int x, int y) {
         int ctr = 0;
-        int xs = x * CELL_SIZE + (CELL_SIZE / 2);
-        int ys = y * CELL_SIZE + (CELL_SIZE / 2);
+        int xs = x * cellSize + (cellSize / 2);
+        int ys = y * cellSize + (cellSize / 2);
         int x0, y0, x1, y1;
 
-        if (randomChoice(x, 0, XCOUNT)) {
+        if (randomChoice(x, 0, xcount)) {
             x0 = xs + xh0;
             y0 = ys + yh0;
             x1 = xs - xh0;
@@ -61,7 +61,7 @@ public class Distribution2 extends PApplet {
             drawLine(x0, y0, x1, y1);
             ctr++;
         }
-        if (randomChoice(y, 0, YCOUNT)) {
+        if (randomChoice(y, 0, ycount)) {
             x0 = xs + xh1;
             y0 = ys + yh1;
             x1 = xs - xh1;
@@ -69,7 +69,7 @@ public class Distribution2 extends PApplet {
             drawLine(x0, y0, x1, y1);
             ctr++;
         }
-        if (randomChoice(y, 0, YCOUNT)) {
+        if (randomChoice(y, 0, ycount)) {
             x0 = xs - xh1;
             y0 = ys + yh1;
             x1 = xs + xh1;
@@ -81,7 +81,7 @@ public class Distribution2 extends PApplet {
         if (ctr == 3) {
             noStroke();
             fill(r.nextInt(255),r.nextInt(255),r.nextInt(255), 40 + r.nextInt(50));
-            float radius = CELL_SIZE * (1 + 2 * r.nextFloat());
+            float radius = cellSize * (1 + 2 * r.nextFloat());
             ellipse(xs, ys, radius, radius);
         }
     }

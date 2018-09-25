@@ -7,7 +7,7 @@ import java.util.Random;
 public class Curves1 extends PApplet {
     private static final String NAME = "Curves1";
     private static final double TWO_PI = Math.PI * 2;
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
+    private int outputWidth = 1500, outputHeight = 1000;
     private Random r = new Random();
     private static PApplet context;
 
@@ -17,7 +17,7 @@ public class Curves1 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -41,8 +41,8 @@ public class Curves1 extends PApplet {
 
     private void drawRandomCurve() {
         int radius = 50 + r.nextInt(100);
-        int x = radius + r.nextInt(OUTPUT_WIDTH - 2 * radius);
-        int y = radius + r.nextInt(OUTPUT_HEIGHT - 2 * radius);
+        int x = radius + r.nextInt(outputWidth - 2 * radius);
+        int y = radius + r.nextInt(outputHeight - 2 * radius);
         int pointCount = 4 + r.nextInt(6);
         List<Point> points = new ArrayList<>();
         beginShape();

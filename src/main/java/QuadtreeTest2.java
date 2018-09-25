@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class QuadtreeTest2 extends PApplet {
     private static final String NAME = "QuadtreeTest2";
-    private static final int OUTPUT_WIDTH = 2000, OUTPUT_HEIGHT = 1000;
+    private int outputWidth = 2000, outputHeight = 1000;
 
     private Random r = new Random();
     private static PApplet context;
@@ -18,7 +18,7 @@ public class QuadtreeTest2 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -37,16 +37,16 @@ public class QuadtreeTest2 extends PApplet {
         int h = 5 + r.nextInt(500);
         Triangle triangle = ShapeUtils.randomTriangle(x, y, w, h);
         QuadRectangle bounds = new QuadRectangle(x, y, w, h);
-        StandardQuadTree<Triangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, OUTPUT_WIDTH, OUTPUT_HEIGHT), 0, 1, 2);
+        StandardQuadTree<Triangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, outputWidth, outputHeight), 0, 1, 2);
         int count = 0;
         while (count < 4000) {
-            int xoffset = r.nextInt(OUTPUT_WIDTH);
-            int yoffset = r.nextInt(OUTPUT_HEIGHT);
+            int xoffset = r.nextInt(outputWidth);
+            int yoffset = r.nextInt(outputHeight);
             double scale = 0.05 + 10 * r.nextDouble();
-            if (xoffset + w * scale > OUTPUT_WIDTH) {
+            if (xoffset + w * scale > outputWidth) {
                 continue;
             }
-            if (yoffset + h * scale > OUTPUT_HEIGHT) {
+            if (yoffset + h * scale > outputHeight) {
                 continue;
             }
             Triangle t = triangle.transform(xoffset, yoffset, scale);
@@ -62,8 +62,8 @@ public class QuadtreeTest2 extends PApplet {
             if (fits) {
                 quadTree.insert(q, t);
                 Point c = t.centroidCenter();
-                int r = (int)(255 * c.x / (float)OUTPUT_WIDTH);
-                int g = (int)(255 * c.y / (float)OUTPUT_HEIGHT);
+                int r = (int)(255 * c.x / (float)outputWidth);
+                int g = (int)(255 * c.y / (float)outputHeight);
                 int b = 128;
                 fill(r, g, b);
                 triangle((float)t.p0.x, (float)t.p0.y , (float)t.p1.x, (float)t.p1.y, (float)t.p2.x, (float)t.p2.y);

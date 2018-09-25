@@ -5,10 +5,10 @@ import java.util.Random;
 
 public class ImageBlend1 extends PApplet {
     private static final String NAME = "ImageBlend1";
-    private static final int CELL_SIZE = 2;
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
+    private int cellSize = 2;
+    private int outputWidth = 1500, outputHeight = 1000;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
 
     private PImage img1, img2;
     private Random r = new Random();
@@ -21,7 +21,7 @@ public class ImageBlend1 extends PApplet {
     public void settings() {
         img1 = loadImage("image1.jpg");
         img2 = loadImage("image2.jpg");
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -33,15 +33,15 @@ public class ImageBlend1 extends PApplet {
         stroke(0);
         strokeWeight(1);
 
-        int srcCellWidth1 = img1.width / XCOUNT;
-        int srcCellHeight1 = img1.height / YCOUNT;
-        int srcCellWidth2 = img2.width / XCOUNT;
-        int srcCellHeight2 = img2.height / YCOUNT;
-        int dstCellWidth = OUTPUT_WIDTH / XCOUNT;
-        int dstCellHeight = OUTPUT_HEIGHT / YCOUNT;
+        int srcCellWidth1 = img1.width / xcount;
+        int srcCellHeight1 = img1.height / ycount;
+        int srcCellWidth2 = img2.width / xcount;
+        int srcCellHeight2 = img2.height / ycount;
+        int dstCellWidth = outputWidth / xcount;
+        int dstCellHeight = outputHeight / ycount;
 
-        for (int x = 0; x < XCOUNT; x++) {
-            for (int y = 0; y < YCOUNT; y++) {
+        for (int x = 0; x < xcount; x++) {
+            for (int y = 0; y < ycount; y++) {
                 if (overThreshold(x, y)) {
                     image(img1.get(x * srcCellWidth1, y * srcCellHeight1, srcCellWidth1, srcCellHeight1),
                             x * dstCellWidth, y * dstCellHeight, dstCellWidth, dstCellHeight);
@@ -59,7 +59,7 @@ public class ImageBlend1 extends PApplet {
     private boolean overThreshold(int x, int y) {
         double s1 = 10.0;
         double s2 = 4.0;
-        double x0 = s1 * (-0.5 + (double)x / XCOUNT);
+        double x0 = s1 * (-0.5 + (double)x / xcount);
         //double y0 = s1 * (-0.5 + (double)y / ycount);
         print(x, x0, "\n");
         return x0 > (-0.5 + r.nextDouble()) * s2;

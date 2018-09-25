@@ -3,7 +3,7 @@ import processing.core.PImage;
 
 public class ImageBlend3 extends PApplet {
     private static final String NAME = "ImageBlend3";
-    private static final int OUTPUT_WIDTH = 1500, OUTPUT_HEIGHT = 1000;
+    private int outputWidth = 1500, outputHeight = 1000;
 
     private PImage img1, img2;
 
@@ -15,7 +15,7 @@ public class ImageBlend3 extends PApplet {
     public void settings() {
         img1 = loadImage("image1.jpg");
         img2 = loadImage("image3.jpg");
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
@@ -24,13 +24,13 @@ public class ImageBlend3 extends PApplet {
     public void draw() {
         background(0);
 
-        float srcScaleX1 = (float)img1.width / OUTPUT_WIDTH;
-        float srcScaleY1 = (float)img1.height / OUTPUT_HEIGHT;
-        float srcScaleX2 = (float)img2.width / OUTPUT_WIDTH;
-        float srcScaleY2 = (float)img2.height / OUTPUT_HEIGHT;
+        float srcScaleX1 = (float)img1.width / outputWidth;
+        float srcScaleY1 = (float)img1.height / outputHeight;
+        float srcScaleX2 = (float)img2.width / outputWidth;
+        float srcScaleY2 = (float)img2.height / outputHeight;
         int cellSize = 20;
-        int xcount = OUTPUT_WIDTH / cellSize;
-        int ycount = OUTPUT_HEIGHT / cellSize;
+        int xcount = outputWidth / cellSize;
+        int ycount = outputHeight / cellSize;
         int[][] imagePoints1 = new int[xcount][ycount];
         int[][] imagePoints2 = new int[xcount][ycount];
 

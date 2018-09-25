@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 public class QuadtreeMaze1 extends PApplet {
     private static final String NAME = "QuadtreeMaze1";
-    private static final int CELL_SIZE = 40;
-    private static final int CELL_MARGIN = (int)(CELL_SIZE / 8);
+    private int cellSize = 40;
+    private int cellMargin = (int)(cellSize / 8);
 
-    private static final int OUTPUT_WIDTH = 3600, OUTPUT_HEIGHT = 2400;
-    private static final int XCOUNT = OUTPUT_WIDTH / CELL_SIZE;
-    private static final int YCOUNT = OUTPUT_HEIGHT / CELL_SIZE;
+    private int outputWidth = 3600, outputHeight = 2400;
+    private int xcount = outputWidth / cellSize;
+    private int ycount = outputHeight / cellSize;
 
     private static final boolean SPARCE = false;
     private final int initialColor = color(150, 150, 150, 128);
@@ -38,7 +38,7 @@ public class QuadtreeMaze1 extends PApplet {
 
     @Override
     public void settings() {
-        size(OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        size(outputWidth, outputHeight);
         smooth(8);
         pixelDensity(1);
     }
@@ -46,7 +46,7 @@ public class QuadtreeMaze1 extends PApplet {
     @Override
     public void setup() {
         runners = new HashSet<>();
-        StandardQuadTree<MazeCell> quadTree = new StandardQuadTree<>(new MazeCell(0, 0, XCOUNT, YCOUNT), 0, 1, 4);
+        StandardQuadTree<MazeCell> quadTree = new StandardQuadTree<>(new MazeCell(0, 0, xcount, ycount), 0, 1, 4);
         background(220);
         //noStroke();
         stroke(0);
@@ -55,8 +55,8 @@ public class QuadtreeMaze1 extends PApplet {
         QuadRectangle target = new QuadRectangle(0, 0, 1, 1);
         List<MazeCell> hits = quadTree.getElements(target).stream().filter(c -> c.x == 0 && c.y == 0).collect(Collectors.toList());
         start = hits.get(0);
-        target = new QuadRectangle(XCOUNT - 1, YCOUNT - 1, 1, 1);
-        hits = quadTree.getElements(target).stream().filter(c -> c.x + c.width == XCOUNT && c.y + c.height == YCOUNT).collect(Collectors.toList());
+        target = new QuadRectangle(xcount - 1, ycount - 1, 1, 1);
+        hits = quadTree.getElements(target).stream().filter(c -> c.x + c.width == xcount && c.y + c.height == ycount).collect(Collectors.toList());
         finish = hits.get(0);
 
         placeInitialRunner(start);
@@ -65,16 +65,16 @@ public class QuadtreeMaze1 extends PApplet {
     }
 
     private void fillQuadtree(StandardQuadTree<MazeCell> quadTree) {
-        int emptyCells = XCOUNT * YCOUNT;
+        int emptyCells = xcount * ycount;
         while (emptyCells > 0) {
-            int x = random.nextInt(XCOUNT);
-            int y = random.nextInt(YCOUNT);
+            int x = random.nextInt(xcount);
+            int y = random.nextInt(ycount);
             int w = 1 + random.nextInt(maxCellDimension);
             int h = 1 + random.nextInt(maxCellDimension);
-            if (x + w > XCOUNT) {
+            if (x + w > xcount) {
                 continue;
             }
-            if (y + h > YCOUNT) {
+            if (y + h > ycount) {
                 continue;
             }
             MazeCell q = new MazeCell(x, y, w, h);
@@ -160,8 +160,8 @@ public class QuadtreeMaze1 extends PApplet {
         textSize(20);
         textAlign(CENTER);
         fill(0);
-        text('S', (float)start.x * CELL_SIZE + CELL_SIZE / 2, (float)start.y * CELL_SIZE + CELL_SIZE / 2 + 4);
-        text('F', (float)finish.x * CELL_SIZE + CELL_SIZE / 2, (float)finish.y * CELL_SIZE + CELL_SIZE / 2 + 4);
+        text('S', (float)start.x * cellSize + cellSize / 2, (float)start.y * cellSize + cellSize / 2 + 4);
+        text('F', (float)finish.x * cellSize + cellSize / 2, (float)finish.y * cellSize + cellSize / 2 + 4);
     }
 
     private void toggleSolution() {
@@ -183,18 +183,18 @@ public class QuadtreeMaze1 extends PApplet {
     }
 
     private void drawQuad(MazeCell q, int color) {
-        float x = (float)q.x * CELL_SIZE + CELL_MARGIN;
-        float y = (float)q.y * CELL_SIZE + CELL_MARGIN;
-        float w = (float)q.width * CELL_SIZE - 2 * CELL_MARGIN;
-        float h = (float)q.height * CELL_SIZE - 2 * CELL_MARGIN;
+        float x = (float)q.x * cellSize + cellMargin;
+        float y = (float)q.y * cellSize + cellMargin;
+        float w = (float)q.width * cellSize - 2 * cellMargin;
+        float h = (float)q.height * cellSize - 2 * cellMargin;
 
         stroke(0);
         strokeWeight(2);
         fill(color);
         if (q.width == 1 && q.height == 1) {
-            ellipse(x - CELL_MARGIN + CELL_SIZE / 2, y - CELL_MARGIN + CELL_SIZE / 2, w, h);
+            ellipse(x - cellMargin + cellSize / 2, y - cellMargin + cellSize / 2, w, h);
         } else {
-            rect(x, y, w, h, CELL_SIZE / 2 - CELL_MARGIN);
+            rect(x, y, w, h, cellSize / 2 - cellMargin);
         }
     }
 
@@ -213,9 +213,9 @@ public class QuadtreeMaze1 extends PApplet {
     private void drawHorizontal(MazeCell left, MazeCell right) {
         int top = max((int) left.y, (int) right.y);
         int bottom = min((int) (left.y + left.height), (int) (right.y + right.height));
-        int y = CELL_SIZE * (top + bottom) / 2;
-        int x0 = CELL_SIZE * (int) (left.x + left.width) - CELL_MARGIN;
-        int x1 = CELL_SIZE * (int) right.x + CELL_MARGIN;
+        int y = cellSize * (top + bottom) / 2;
+        int x0 = cellSize * (int) (left.x + left.width) - cellMargin;
+        int x1 = cellSize * (int) right.x + cellMargin;
         strokeCap(SQUARE);
         stroke(0);
         strokeWeight(8);
@@ -225,9 +225,9 @@ public class QuadtreeMaze1 extends PApplet {
     private void drawVertical(MazeCell top, MazeCell bottom) {
         int left = max((int) top.x, (int) bottom.x);
         int right = min((int) (top.x + top.width), (int) (bottom.x + bottom.width));
-        int x = CELL_SIZE * (left + right) / 2;
-        int y0 = CELL_SIZE * (int) (top.y + top.height) - CELL_MARGIN;
-        int y1 = CELL_SIZE * (int) bottom.y + CELL_MARGIN;
+        int x = cellSize * (left + right) / 2;
+        int y0 = cellSize * (int) (top.y + top.height) - cellMargin;
+        int y1 = cellSize * (int) bottom.y + cellMargin;
 
         strokeCap(SQUARE);
         stroke(0);
@@ -267,7 +267,7 @@ public class QuadtreeMaze1 extends PApplet {
             }
         }
         // right neighbors
-        if (q.x + q.width < XCOUNT) {
+        if (q.x + q.width < xcount) {
             target = new QuadRectangle(q.x + q.width, q.y, 1, q.height);
             hits = quadTree.getElements(target);
             for (MazeCell c : hits) {
@@ -297,7 +297,7 @@ public class QuadtreeMaze1 extends PApplet {
             }
         }
         // bottom neighbors
-        if (q.y + q.height < YCOUNT) {
+        if (q.y + q.height < ycount) {
             target = new QuadRectangle(q.x, q.y + q.height, q.width, 1);
             hits = quadTree.getElements(target);
             for (MazeCell c : hits) {
