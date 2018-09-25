@@ -2,7 +2,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Multiple Particle Systems

@@ -1,12 +1,8 @@
-import com.sun.xml.internal.bind.v2.util.CollisionCheckStack;
 import processing.core.PApplet;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Curves2 extends PApplet {
     private static final String NAME = "Curves2";

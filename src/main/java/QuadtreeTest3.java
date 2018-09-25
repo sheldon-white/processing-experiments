@@ -1,8 +1,6 @@
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
-import org.omg.CORBA.MARSHAL;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 import java.util.List;
 import java.util.Random;

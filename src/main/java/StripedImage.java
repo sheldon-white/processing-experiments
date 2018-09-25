@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+
 import java.util.Random;
 
 public class StripedImage extends PApplet {

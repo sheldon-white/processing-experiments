@@ -1,11 +1,8 @@
-import javafx.scene.control.Cell;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
-import sun.nio.cs.ext.MacArabic;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class QuadtreeMaze1 extends PApplet {
@@ -17,13 +14,11 @@ public class QuadtreeMaze1 extends PApplet {
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 
-    private static final boolean SPARCE = false;
+    private final boolean SPARCE = false;
     private final int initialColor = color(150, 150, 150, 128);
     private final int visitedColor = color(220, 200, 200);
     private final int occupiedColor = color(180, 255, 180);
     private final int completedColor = color(180, 180, 255);
-    private final int maxCellDimension = 6;
-    private final float replicationFrequency = 0.2F;
 
     private Random random = new Random();
     private List<MazeCell> quadQueue;
@@ -69,6 +64,7 @@ public class QuadtreeMaze1 extends PApplet {
         while (emptyCells > 0) {
             int x = random.nextInt(xcount);
             int y = random.nextInt(ycount);
+            int maxCellDimension = 6;
             int w = 1 + random.nextInt(maxCellDimension);
             int h = 1 + random.nextInt(maxCellDimension);
             if (x + w > xcount) {
@@ -114,6 +110,7 @@ public class QuadtreeMaze1 extends PApplet {
             unvisitedNeighbor.setParent(current);
             drawQuad(unvisitedNeighbor, occupiedColor);
             drawQuad(current, visitedColor);
+            float replicationFrequency = 0.2F;
             if (random.nextFloat() < replicationFrequency) {
                 PathRunner newRunner = new PathRunner(pathRunner);
                 newRunner.place(current);
