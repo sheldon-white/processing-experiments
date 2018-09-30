@@ -31,9 +31,9 @@ public class Curves2 extends PApplet {
         //noStroke();
         stroke(0);
         strokeWeight(3);
-        List<Point> curve = randomCurve((int)(cellSize * 0.45));
+        List<IPoint> curve = randomCurve((int)(cellSize * 0.45));
         List<Float> deltas = new ArrayList<>();
-        for (Point p: curve) {
+        for (IPoint p: curve) {
             deltas.add((r.nextFloat() - 0.5F) * 4);
         }
         int color = color(128 + r.nextInt(128), 128 + r.nextInt(128),128 + r.nextInt(128));
@@ -50,7 +50,7 @@ public class Curves2 extends PApplet {
         noLoop();
     }
 
-    private void placeCurve(int x, int y, List<Point>curve, List<Float> deltas, int color, int dr, int dg, int db) {
+    private void placeCurve(int x, int y, List<IPoint>curve, List<Float> deltas, int color, int dr, int dg, int db) {
         int xs = x * cellSize + cellSize / 2;
         int ys = y * cellSize + cellSize / 2;
         float r = red(color) + x * dr;
@@ -62,7 +62,7 @@ public class Curves2 extends PApplet {
         fill(c);
         beginShape();
         for (int i = 0; i < curve.size(); i++) {
-            Point p = curve.get(i);
+            IPoint p = curve.get(i);
             context.curveVertex(p.x + xs + x * deltas.get(i), p.y + ys + x * deltas.get(i));
         }
         curveVertex(curve.get(0).x + xs + x * deltas.get(0), curve.get(0).y + ys + x * deltas.get(0));
@@ -71,17 +71,17 @@ public class Curves2 extends PApplet {
         endShape();
     }
 
-    private List<Point> randomCurve(int radius) {
+    private List<IPoint> randomCurve(int radius) {
         int x = 0, y = 0;
         int pointCount = 5 + r.nextInt(4);
-        List<Point> points = new ArrayList<>();
+        List<IPoint> points = new ArrayList<>();
         beginShape();
         for (int i = 0; i < pointCount; i++) {
             double angle = i * TWO_PI / pointCount + (0.5 * r.nextDouble());
             float px = x + (float)(Math.cos(angle) * radius * (r.nextDouble() + 0.3));
             float py = y + (float)(Math.sin(angle) * radius * (r.nextDouble() + 0.3));
             //print("angle: ", angle, " x: ", x, " y: ", y, " px: ", px, " py: ", py, "\n");
-            points.add(new Point((int)px, (int)py));
+            points.add(new IPoint((int)px, (int)py));
         }
         return points;
     }

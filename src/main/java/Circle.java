@@ -1,6 +1,6 @@
 public class Circle {
-    Circle(Point center, int radius) {
-        this.center = new Point(center);
+    Circle(IPoint center, int radius) {
+        this.center = new IPoint(center);
         this.radius = radius;
     }
 
@@ -12,6 +12,6 @@ public class Circle {
         return overlaps;
     }
 
-    Point center;
+    IPoint center;
     int radius;
 }

@@ -61,7 +61,7 @@ public class QuadtreeTest2 extends PApplet {
             }
             if (fits) {
                 quadTree.insert(q, t);
-                Point c = t.centroidCenter();
+                IPoint c = t.centroidCenter();
                 int r = (int)(255 * c.x / (float)outputWidth);
                 int g = (int)(255 * c.y / (float)outputHeight);
                 int b = 128;

@@ -59,7 +59,7 @@ public class QuadtreeTest1 extends PApplet {
             }
             if (fits) {
                 quadTree.insert(q, t);
-                Point c = t.centroidCenter();
+                IPoint c = t.centroidCenter();
                 fill(img.get(c.x, c.y));
                 triangle((float)t.p0.x, (float)t.p0.y , (float)t.p1.x, (float)t.p1.y, (float)t.p2.x, (float)t.p2.y);
                 count++;

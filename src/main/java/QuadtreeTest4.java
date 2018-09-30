@@ -8,11 +8,12 @@ import java.util.Random;
 public class QuadtreeTest4 extends PApplet {
     private static final String NAME = "QuadtreeTest4";
 
-    private int outputWidth = 2400, outputHeight = 1600;
+    private int outputWidth = 3000, outputHeight = 2000;
     private int margin = 5;
     private Random r = new Random();
-    private static PApplet context;
-
+    private StandardQuadTree<Circle> quadTree;
+    private int circleCount = 0;
+    private boolean doneDrawingCircles = false;
     public static void main(String args[]) {
         PApplet.main(NAME);
     }
@@ -25,24 +26,26 @@ public class QuadtreeTest4 extends PApplet {
     }
 
     @Override
-    public void draw() {
-        context = this;
+    public void setup() {
+        quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, outputWidth, outputHeight), 0, 1, 4);
         background(220);
 
         //noStroke();
         stroke(0);
         strokeWeight(1.5F);
+    }
 
-        StandardQuadTree<Circle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, outputWidth, outputHeight), 0, 1, 4);
-        int minRadius = 100;
-        while (minRadius > 10) {
-            int tries = 1000;
-            while (tries > 0) {
-                int radius = minRadius + r.nextInt(minRadius);
+    @Override
+    public void draw() {
+        int minRadius = 20;
+        if (!doneDrawingCircles) {
+            int tries = 100;
+            while (tries-- > 0) {
+                int radius = 20 + r.nextInt(minRadius);
                 int x = radius + r.nextInt(outputWidth - 2 * radius);
                 int y = radius + r.nextInt(outputHeight - 2 * radius);
 
-                Circle circle = new Circle(new Point(x, y), radius);
+                Circle circle = new Circle(new IPoint(x, y), radius);
                 QuadRectangle q = new QuadRectangle(x - radius, y - radius, 2 * radius, 2 * radius);
                 List<Circle> hits = quadTree.getElements(q);
                 boolean fits = true;
@@ -55,15 +58,21 @@ public class QuadtreeTest4 extends PApplet {
                 if (fits) {
                     quadTree.insert(q, circle);
                     drawCircle(circle);
+                    circleCount++;
+                    print(circleCount, "\n");
                 }
-                tries--;
             }
-            minRadius -= 10;
         }
+    }
 
-        save(NAME + ".png");
-        print("Done!\n");
-        noLoop();
+
+    @Override
+    public void keyPressed() {
+        if (key == 's' || key == 'S') {
+            save(NAME + ".png");
+        } else if (key == 'd' || key == 'D') {
+            doneDrawingCircles = true;
+        }
     }
 
     private void drawCircle(Circle c) {

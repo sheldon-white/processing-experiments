@@ -49,11 +49,11 @@ public class Tesselation1 extends PApplet {
     }
 
     private void tesselateSquare(int x, int y) {
-        Point ul = new Point(x, y);
-        Point ur = new Point(x + cellSize, y);
-        Point ll = new Point(x, y + cellSize);
-        Point lr = new Point(x + cellSize, y + cellSize);
-        Point cen = new Point(x + halfCellSize, y + halfCellSize);
+        IPoint ul = new IPoint(x, y);
+        IPoint ur = new IPoint(x + cellSize, y);
+        IPoint ll = new IPoint(x, y + cellSize);
+        IPoint lr = new IPoint(x + cellSize, y + cellSize);
+        IPoint cen = new IPoint(x + halfCellSize, y + halfCellSize);
 
         switch (r.nextInt(8)) {
             case 0:
@@ -97,9 +97,9 @@ public class Tesselation1 extends PApplet {
         }
     }
 
-    private void drawTriangle(Point p0, Point p1, Point p2) {
+    private void drawTriangle(IPoint p0, IPoint p1, IPoint p2) {
         Triangle t = new Triangle(p0, p1, p2);
-        Point tc = t.centroidCenter();
+        IPoint tc = t.centroidCenter();
         int c = img.get((int)(srcScaleX * tc.x), (int)(srcScaleY * tc.y));
         fill(c);
         drawTriangle(t);

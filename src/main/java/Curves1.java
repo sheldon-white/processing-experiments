@@ -44,7 +44,7 @@ public class Curves1 extends PApplet {
         int x = radius + r.nextInt(outputWidth - 2 * radius);
         int y = radius + r.nextInt(outputHeight - 2 * radius);
         int pointCount = 4 + r.nextInt(6);
-        List<Point> points = new ArrayList<>();
+        List<IPoint> points = new ArrayList<>();
         beginShape();
         for (int i = 0; i < pointCount; i++) {
             double angle = i * TWO_PI / pointCount + (0.5 * r.nextDouble());
@@ -52,7 +52,7 @@ public class Curves1 extends PApplet {
             float py = y + (float)(Math.sin(angle) * radius * (r.nextDouble() + 0.5));
             //print("angle: ", angle, " x: ", x, " y: ", y, " px: ", px, " py: ", py, "\n");
             strokeWeight(4);
-            points.add(new Point((int)px, (int)py));
+            points.add(new IPoint((int)px, (int)py));
             //point(px, py);
         }
         curveVertex(points.get(0).x, points.get(0).y);
