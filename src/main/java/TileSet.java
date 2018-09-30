@@ -1,13 +1,13 @@
 import java.util.Set;
 
 public class TileSet {
-    private Set<VertexTiling> legalVertexTilings;
+    private Set<VertexRule> rules;
 
-    TileSet(Set<VertexTiling> legalVertexTilings) {
-        this.legalVertexTilings = legalVertexTilings;
+    TileSet(Set<VertexRule> rules) {
+        this.rules = rules;
     }
 
-    public Set<VertexTiling> getLegalVertexTilings() {
-        return legalVertexTilings;
+    public Set<VertexRule> getRules() {
+        return rules;
     }
 }

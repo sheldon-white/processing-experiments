@@ -11,7 +11,7 @@ public class RandomText1 extends PApplet {
     private Random random = new Random();
     private Map<String, PFont> loadedFonts;
     private String[] fontNames = PFont.list();
-    List<String> dictionary;
+    private List<String> dictionary;
     private Set<DisplayedWord> displayedWords;
 
     public static void main(String args[]) {

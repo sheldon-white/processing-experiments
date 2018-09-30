@@ -3,14 +3,14 @@ import java.util.stream.Collectors;
 
 public class Tile {
     private List<FPoint> points;
-    private int id;
+    private char id;
 
-    public Tile(int id, List<FPoint> points) {
+    public Tile(char id, List<FPoint> points) {
         this.id = id;
         this.points = points.stream().map(FPoint::new).collect(Collectors.toList());
     }
 
-    public int getId() {
+    public char getId() {
         return id;
     }
 
