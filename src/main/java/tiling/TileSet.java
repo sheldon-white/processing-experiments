@@ -1,3 +1,5 @@
+package tiling;
+
 import java.util.Set;
 
 public class TileSet {

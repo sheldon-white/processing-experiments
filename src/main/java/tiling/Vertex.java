@@ -1,9 +1,12 @@
+package tiling;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Vertex {
     private List<Tile> tiles;
+    private FPoint location;
 
     public Vertex() {
     }
@@ -19,6 +22,10 @@ public class Vertex {
     public Set<VertexRule> getMatchingRules(TileSet tileSet) {
         String signature = getSignature();
         return tileSet.getRules().stream().filter(vr -> vr.vertexMatches(signature)).collect(Collectors.toSet());
+    }
+
+    public FPoint getLocation() {
+        return location;
     }
 
     private String getSignature() {

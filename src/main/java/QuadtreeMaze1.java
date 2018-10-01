@@ -10,7 +10,7 @@ public class QuadtreeMaze1 extends PApplet {
     private int cellSize = 40;
     private int cellMargin = (int)(cellSize / 8);
 
-    private int outputWidth = 3600, outputHeight = 2400;
+    private int outputWidth = 2000, outputHeight = 1000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 

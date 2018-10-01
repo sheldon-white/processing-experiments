@@ -35,7 +35,7 @@ public class QuadtreeText1 extends PApplet {
     @Override
     public void setup() {
         loadedFonts = new HashMap<>();
-        StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new MazeCell(0, 0, xcount, ycount), 0, 1, 4);
+        StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
         background(100);
         //noStroke();
 //        stroke(0);
