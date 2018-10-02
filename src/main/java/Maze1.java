@@ -5,12 +5,13 @@ import processing.core.PApplet;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class QuadtreeMaze1 extends PApplet {
-    private static final String NAME = "QuadtreeMaze1";
-    private int cellSize = 40;
-    private int cellMargin = (int)(cellSize / 8);
+public class Maze1 extends PApplet {
+    private static final String NAME = "Maze1";
+    private int cellSize = 30;
+    private int halfCellSize = cellSize / 2;
+    private int cellMargin = cellSize / 8;
 
-    private int outputWidth = 2000, outputHeight = 1000;
+    private int outputWidth = 900, outputHeight = 600;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 
@@ -21,11 +22,12 @@ public class QuadtreeMaze1 extends PApplet {
     private final int completedColor = color(180, 180, 255);
 
     private Random random = new Random();
-    private List<MazeCell> quadQueue;
+    private List<RectangularMazeCell> quadQueue;
     private Set<PathRunner> runners;
-    private MazeCell start;
-    private MazeCell finish;
+    private RectangularMazeCell start;
+    private RectangularMazeCell finish;
     private boolean solutionVisible = false;
+    private StandardQuadTree<RectangularMazeCell> quadTree;
 
     public static void main(String args[]) {
         PApplet.main(NAME);
@@ -41,17 +43,17 @@ public class QuadtreeMaze1 extends PApplet {
     @Override
     public void setup() {
         runners = new HashSet<>();
-        StandardQuadTree<MazeCell> quadTree = new StandardQuadTree<>(new MazeCell(0, 0, xcount, ycount), 0, 1, 4);
+        quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
         background(220);
         //noStroke();
         stroke(0);
         strokeWeight(1.5F);
         fillQuadtree(quadTree);
         QuadRectangle target = new QuadRectangle(0, 0, 1, 1);
-        List<MazeCell> hits = quadTree.getElements(target).stream().filter(c -> c.x == 0 && c.y == 0).collect(Collectors.toList());
+        List<RectangularMazeCell> hits = quadTree.getElements(target).stream().filter(c -> c.bounds.x == 0 && c.bounds.y == 0).collect(Collectors.toList());
         start = hits.get(0);
         target = new QuadRectangle(xcount - 1, ycount - 1, 1, 1);
-        hits = quadTree.getElements(target).stream().filter(c -> c.x + c.width == xcount && c.y + c.height == ycount).collect(Collectors.toList());
+        hits = quadTree.getElements(target).stream().filter(c -> c.bounds.x + c.bounds.width == xcount && c.bounds.y + c.bounds.height == ycount).collect(Collectors.toList());
         finish = hits.get(0);
 
         placeInitialRunner(start);
@@ -59,12 +61,12 @@ public class QuadtreeMaze1 extends PApplet {
         buildNeighbors(quadTree, quadQueue);
     }
 
-    private void fillQuadtree(StandardQuadTree<MazeCell> quadTree) {
+    private void fillQuadtree(StandardQuadTree<RectangularMazeCell> quadTree) {
         int emptyCells = xcount * ycount;
         while (emptyCells > 0) {
             int x = random.nextInt(xcount);
             int y = random.nextInt(ycount);
-            int maxCellDimension = 6;
+            int maxCellDimension = 4;
             int w = 1 + random.nextInt(maxCellDimension);
             int h = 1 + random.nextInt(maxCellDimension);
             if (x + w > xcount) {
@@ -73,17 +75,17 @@ public class QuadtreeMaze1 extends PApplet {
             if (y + h > ycount) {
                 continue;
             }
-            MazeCell q = new MazeCell(x, y, w, h);
-            List<MazeCell> hits = quadTree.getElements(q);
+            RectangularMazeCell newCell = new RectangularMazeCell(x, y, w, h);
+            List<RectangularMazeCell> hits = quadTree.getElements(newCell.bounds);
             boolean fits = true;
-            for (QuadRectangle c : hits) {
-                if (q != c && ShapeUtils.rectanglesIntersect(q, c)) {
+            for (RectangularMazeCell c : hits) {
+                if (newCell != c && ShapeUtils.rectanglesIntersect(newCell.bounds, c.bounds)) {
                     fits = false;
                     break;
                 }
             }
             if (fits) {
-                quadTree.insert(q, q);
+                quadTree.insert(newCell.bounds, newCell);
                 emptyCells -= w * h;
                 print("emptyCells: ", emptyCells, "\n");
             }
@@ -94,39 +96,38 @@ public class QuadtreeMaze1 extends PApplet {
     private void placeInitialRunner(MazeCell start) {
         PathRunner runner = new PathRunner(start);
         runner.place(start);
-        start.setVisited(true);
+        start.setVisited();
         runners.add(runner);
     }
 
     private Set<PathRunner> advance(PathRunner pathRunner) {
         Set<PathRunner> runners = new HashSet<>();
-        MazeCell current = pathRunner.getCurrent();
+        RectangularMazeCell current = (RectangularMazeCell)pathRunner.getCurrent();
+        RectangularMazeCell start = (RectangularMazeCell)pathRunner.getStart();
         // pick random next cell
         Optional<MazeCell> omc = pathRunner.randomUnvisitedNeighbor(current.getNeighbors());
         if (omc.isPresent()) {
             MazeCell unvisitedNeighbor = omc.get();
             pathRunner.place(unvisitedNeighbor);
-            unvisitedNeighbor.setVisited(true);
+            unvisitedNeighbor.setVisited();
             unvisitedNeighbor.setParent(current);
-            drawQuad(unvisitedNeighbor, occupiedColor);
-            drawQuad(current, visitedColor);
+            unvisitedNeighbor.drawOccupied();
+            current.drawVisited();
             float replicationFrequency = 0.2F;
             if (random.nextFloat() < replicationFrequency) {
                 PathRunner newRunner = new PathRunner(pathRunner);
                 newRunner.place(current);
-                current.setVisited(true);
+                current.setVisited();
                 runners.add(newRunner);
             }
             runners.add(pathRunner);
         } else {
-            current = pathRunner.getCurrent();
-            MazeCell next = current.getParent();
-            drawQuad(current, completedColor);
+            RectangularMazeCell next = (RectangularMazeCell)current.getParent();
+            current.drawCompleted();
             if (next != null) {
-                drawQuad(next, completedColor);
-                drawBridge(current, next);
+                next.drawCompleted();
                 pathRunner.place(next);
-                if (next.x != pathRunner.start.x || next.y != pathRunner.start.y) {
+                if (next.bounds.x != start.bounds.x || next.bounds.y != start.bounds.y) {
                     runners.add(pathRunner);
                 }
             }
@@ -139,33 +140,43 @@ public class QuadtreeMaze1 extends PApplet {
     @Override
     public void draw() {
         if (quadQueue.size() > 0) {
-            MazeCell r = quadQueue.remove(0);
-            if (SPARCE && r.width == 1 && r.height == 1) {
+            RectangularMazeCell r = quadQueue.remove(0);
+            if (SPARCE && r.bounds.width == 1 && r.bounds.height == 1) {
                 return;
             }
-            drawQuad(r, initialColor);
+            r.draw(initialColor);
         } else if (!runners.isEmpty()) {
             advanceRunners();
         } else {
+            drawConnections(quadTree);
             drawStartAndFinish();
         }
     }
 
+    private void drawConnections(StandardQuadTree<RectangularMazeCell> quadTree) {
+        for (RectangularMazeCell cell: quadTree.getElements(quadTree.getZone())) {
+            if (cell.getParent() != null) {
+                RectangularMazeCell parent = (RectangularMazeCell) cell.getParent();
+                drawBridge(cell.bounds, parent.bounds);
+            }
+        }
+    }
+
     private void drawStartAndFinish() {
-        drawQuad(start, occupiedColor);
-        drawQuad(finish, occupiedColor);
+        start.drawOccupied();
+        finish.drawOccupied();
         textSize(20);
         textAlign(CENTER);
         fill(0);
-        text('S', (float)start.x * cellSize + cellSize / 2, (float)start.y * cellSize + cellSize / 2 + 4);
-        text('F', (float)finish.x * cellSize + cellSize / 2, (float)finish.y * cellSize + cellSize / 2 + 4);
+        text('S', (float)start.bounds.x * cellSize + halfCellSize, (float)start.bounds.y * cellSize + halfCellSize + 4);
+        text('F', (float)finish.bounds.x * cellSize + halfCellSize, (float)finish.bounds.y * cellSize + halfCellSize + 4);
     }
 
     private void toggleSolution() {
         solutionVisible = ! solutionVisible;
         MazeCell cell = finish;
         while (cell != null) {
-            drawQuad(cell, solutionVisible ? occupiedColor : completedColor);
+            cell.draw(solutionVisible ? occupiedColor : completedColor);
             cell = cell.getParent();
         }
     }
@@ -179,7 +190,7 @@ public class QuadtreeMaze1 extends PApplet {
         }
     }
 
-    private void drawQuad(MazeCell q, int color) {
+    private void drawQuad(QuadRectangle q, int color) {
         float x = (float)q.x * cellSize + cellMargin;
         float y = (float)q.y * cellSize + cellMargin;
         float w = (float)q.width * cellSize - 2 * cellMargin;
@@ -189,13 +200,13 @@ public class QuadtreeMaze1 extends PApplet {
         strokeWeight(2);
         fill(color);
         if (q.width == 1 && q.height == 1) {
-            ellipse(x - cellMargin + cellSize / 2, y - cellMargin + cellSize / 2, w, h);
+            ellipse(x - cellMargin + halfCellSize, y - cellMargin + halfCellSize, w, h);
         } else {
-            rect(x, y, w, h, cellSize / 2 - cellMargin);
+            rect(x, y, w, h, halfCellSize - cellMargin);
         }
     }
 
-    private void drawBridge(MazeCell m0, MazeCell m1) {
+    private void drawBridge(QuadRectangle m0, QuadRectangle m1) {
         if (m0.x + m0.width == m1.x) {
             drawHorizontal(m0, m1);
         } else if (m1.x + m1.width == m0.x) {
@@ -207,7 +218,7 @@ public class QuadtreeMaze1 extends PApplet {
         }
     }
 
-    private void drawHorizontal(MazeCell left, MazeCell right) {
+    private void drawHorizontal(QuadRectangle left, QuadRectangle right) {
         int top = max((int) left.y, (int) right.y);
         int bottom = min((int) (left.y + left.height), (int) (right.y + right.height));
         int y = cellSize * (top + bottom) / 2;
@@ -219,7 +230,7 @@ public class QuadtreeMaze1 extends PApplet {
         line(x0 - 2, y, x1 + 2, y);
     }
 
-    private void drawVertical(MazeCell top, MazeCell bottom) {
+    private void drawVertical(QuadRectangle top, QuadRectangle bottom) {
         int left = max((int) top.x, (int) bottom.x);
         int right = min((int) (top.x + top.width), (int) (bottom.x + bottom.width));
         int x = cellSize * (left + right) / 2;
@@ -240,75 +251,105 @@ public class QuadtreeMaze1 extends PApplet {
         runners = runners.stream().flatMap(r -> advance(r).stream()).collect(Collectors.toSet());
     }
 
-    private void buildNeighbors(StandardQuadTree<MazeCell> quadTree, List<MazeCell> cells) {
+    private void buildNeighbors(StandardQuadTree<RectangularMazeCell> quadTree, List<RectangularMazeCell> cells) {
         cells.forEach(c -> c.setNeighbors(getNeighbors(quadTree, c)));
     }
 
-    private Set<MazeCell> getNeighbors(StandardQuadTree<MazeCell> quadTree, MazeCell q) {
+    private Set<MazeCell> getNeighbors(StandardQuadTree<RectangularMazeCell> quadTree, RectangularMazeCell q) {
         Set<MazeCell> neighbors = new HashSet<>();
         QuadRectangle target;
-        List<MazeCell> hits;
+        List<RectangularMazeCell> hits;
         // left neighbors
-        if (q.x > 0) {
-            target = new QuadRectangle(q.x - 1, q.y, 1, q.height);
+        if (q.bounds.x > 0) {
+            target = new QuadRectangle(q.bounds.x - 1, q.bounds.y, 1, q.bounds.height);
             hits = quadTree.getElements(target);
-            for (MazeCell c : hits) {
-                if (c.x + c.width == q.x) {
-                    if (SPARCE && c.width == 1 && c.height == 1) {
+            for (RectangularMazeCell c : hits) {
+                if (c.bounds.x + c.bounds.width == q.bounds.x) {
+                    if (SPARCE && c.bounds.width == 1 && c.bounds.height == 1) {
                         continue;
                     }
-                    if (c.y == q.y || c.y + c.height == q.y + q.height || between(c.y, q.y, q.height) || between(q.y, c.y, c.height)) {
+                    if (c.bounds.y == q.bounds.y || c.bounds.y + c.bounds.height == q.bounds.y + q.bounds.height || between(c.bounds.y, q.bounds.y, q.bounds.height) || between(q.bounds.y, c.bounds.y, c.bounds.height)) {
                         neighbors.add(c);
                     }
                 }
             }
         }
         // right neighbors
-        if (q.x + q.width < xcount) {
-            target = new QuadRectangle(q.x + q.width, q.y, 1, q.height);
+        if (q.bounds.x + q.bounds.width < xcount) {
+            target = new QuadRectangle(q.bounds.x + q.bounds.width, q.bounds.y, 1, q.bounds.height);
             hits = quadTree.getElements(target);
-            for (MazeCell c : hits) {
-                if (q.x + q.width == c.x) {
-                    if (SPARCE && c.width == 1 && c.height == 1) {
+            for (RectangularMazeCell c : hits) {
+                if (q.bounds.x + q.bounds.width == c.bounds.x) {
+                    if (SPARCE && c.bounds.width == 1 && c.bounds.height == 1) {
                         continue;
                     }
-                    if (c.y == q.y || c.y + c.height == q.y + q.height || between(c.y, q.y, q.height) || between(q.y, c.y, c.height)) {
+                    if (c.bounds.y == q.bounds.y || c.bounds.y + c.bounds.height == q.bounds.y + q.bounds.height || between(c.bounds.y, q.bounds.y, q.bounds.height) || between(q.bounds.y, c.bounds.y, c.bounds.height)) {
                         neighbors.add(c);
                     }
                 }
             }
         }
         // top neighbors
-        if (q.y > 0) {
-            target = new QuadRectangle(q.x, q.y - 1, q.width, 1);
+        if (q.bounds.y > 0) {
+            target = new QuadRectangle(q.bounds.x, q.bounds.y - 1, q.bounds.width, 1);
             hits = quadTree.getElements(target);
-            for (MazeCell c : hits) {
-                if (c.y + c.height == q.y) {
-                    if (SPARCE && c.width == 1 && c.height == 1) {
+            for (RectangularMazeCell c : hits) {
+                if (c.bounds.y + c.bounds.height == q.bounds.y) {
+                    if (SPARCE && c.bounds.width == 1 && c.bounds.height == 1) {
                         continue;
                     }
-                    if (c.x == q.x || c.x + c.width == q.x + q.width || between(c.x, q.x, q.width) || between(q.x, c.x, c.width)) {
+                    if (c.bounds.x == q.bounds.x || c.bounds.x + c.bounds.width == q.bounds.x + q.bounds.width || between(c.bounds.x, q.bounds.x, q.bounds.width) || between(q.bounds.x, c.bounds.x, c.bounds.width)) {
                         neighbors.add(c);
                     }
                 }
             }
         }
         // bottom neighbors
-        if (q.y + q.height < ycount) {
-            target = new QuadRectangle(q.x, q.y + q.height, q.width, 1);
+        if (q.bounds.y + q.bounds.height < ycount) {
+            target = new QuadRectangle(q.bounds.x, q.bounds.y + q.bounds.height, q.bounds.width, 1);
             hits = quadTree.getElements(target);
-            for (MazeCell c : hits) {
-                if (q.y + q.height == c.y) {
-                    if (SPARCE && c.width == 1 && c.height == 1) {
+            for (RectangularMazeCell c : hits) {
+                if (q.bounds.y + q.bounds.height == c.bounds.y) {
+                    if (SPARCE && c.bounds.width == 1 && c.bounds.height == 1) {
                         continue;
                     }
-                    if (c.x == q.x || c.x + c.width == q.x + q.width || between(c.x, q.x, q.width) || between(q.x, c.x, c.width)) {
+                    if (c.bounds.x == q.bounds.x || c.bounds.x + c.bounds.width == q.bounds.x + q.bounds.width || between(c.bounds.x, q.bounds.x, q.bounds.width) || between(q.bounds.x, c.bounds.x, c.bounds.width)) {
                         neighbors.add(c);
                     }
                 }
             }
         }
         return neighbors;
+    }
+
+    class RectangularMazeCell extends MazeCell {
+        private QuadRectangle bounds;
+
+        RectangularMazeCell(int x, int y, int width, int height) {
+            super();
+            bounds = new QuadRectangle(x, y, width, height);
+        }
+
+        public boolean equals(MazeCell other) {
+            RectangularMazeCell rc = (RectangularMazeCell) other;
+            return rc.bounds.x == this.bounds.x && rc.bounds.y == this.bounds.y;
+        }
+
+        public void drawOccupied() {
+            this.draw(occupiedColor);
+        }
+
+        public void drawVisited() {
+            this.draw(visitedColor);
+        }
+
+        public void drawCompleted() {
+            this.draw(completedColor);
+        }
+
+        public void draw(int color) {
+            drawQuad(this.bounds, color);
+        }
     }
 }
 

@@ -3,37 +3,43 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MazeCell extends QuadRectangle {
+public abstract class MazeCell {
     private Set<MazeCell> neighbors;
     private boolean visited;
     private MazeCell parent;
 
-    MazeCell(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    MazeCell() {
         neighbors = new HashSet<>();
     }
 
-    public Set<MazeCell> getNeighbors() {
+    public abstract boolean equals(MazeCell other);
+
+    public abstract void drawOccupied();
+    public abstract void drawVisited();
+    public abstract void drawCompleted();
+    public abstract void draw(int color);
+
+    Set<MazeCell> getNeighbors() {
         return neighbors;
     }
 
-    public void setNeighbors(Set<MazeCell> neighbors) {
+    void setNeighbors(Set<MazeCell> neighbors) {
         this.neighbors = neighbors;
     }
 
-    public boolean isVisited() {
+    boolean isVisited() {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
+    void setVisited() {
+        this.visited = true;
     }
 
-    public MazeCell getParent() {
+    MazeCell getParent() {
         return parent;
     }
 
-    public void setParent(MazeCell parent) {
+    void setParent(MazeCell parent) {
         this.parent = parent;
     }
 }
