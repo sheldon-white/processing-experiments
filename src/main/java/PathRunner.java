@@ -10,7 +10,7 @@ class PathRunner {
         this.start = start;
     }
 
-    PathRunner(PathRunner parent) {
+    private PathRunner(PathRunner parent) {
         start = current = parent.current;
     }
 
@@ -18,21 +18,18 @@ class PathRunner {
         current = cell;
     }
 
-    MazeCell getCurrent() {
+    private MazeCell getCurrent() {
         return current;
-    }
-
-    MazeCell getStart() {
-        return start;
     }
 
     Set<PathRunner> advance() {
         Set<PathRunner> runners = new HashSet<>();
+        MazeCell current = getCurrent();
         // pick random next cell
         Optional<MazeCell> omc = randomUnvisitedNeighbor(current.getNeighbors());
         if (omc.isPresent()) {
             MazeCell unvisitedNeighbor = omc.get();
-            place(unvisitedNeighbor);
+            this.place(unvisitedNeighbor);
             unvisitedNeighbor.setVisited();
             unvisitedNeighbor.setParent(current);
             unvisitedNeighbor.drawOccupied();
@@ -46,33 +43,21 @@ class PathRunner {
             }
             runners.add(this);
         } else {
-            current = this.getCurrent();
-            Maze1.RectangularMazeCell next = (Maze1.RectangularMazeCell)current.getParent();
-            Maze1.RectangularMazeCell start = (Maze1.RectangularMazeCell)this.start;
+            MazeCell next = current.getParent();
             current.drawCompleted();
             if (next != null) {
                 next.drawCompleted();
-                this.place(next);
+                place(next);
                 if (!next.equals(start)) {
                     runners.add(this);
                 }
             }
-
-//            MazeCell next = current.getParent();
-//            current.drawCompleted();
-//            if (next != null) {
-//                next.drawCompleted();
-//                place(next);
-//                if (!next.equals(start)) {
-//                    runners.add(this);
-//                }
-//            }
         }
 
         return runners;
     }
 
-    Optional<MazeCell> randomUnvisitedNeighbor(Set<MazeCell> neighbors) {
+    private Optional<MazeCell> randomUnvisitedNeighbor(Set<MazeCell> neighbors) {
         Set<MazeCell> unvisitedNeighbors = neighbors.stream().filter(c -> !c.isVisited()).collect(Collectors.toSet());
         if (unvisitedNeighbors.size() > 0) {
             int index = random.nextInt(unvisitedNeighbors.size());

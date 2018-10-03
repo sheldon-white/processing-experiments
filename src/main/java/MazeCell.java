@@ -17,7 +17,7 @@ public abstract class MazeCell {
     public abstract void drawOccupied();
     public abstract void drawVisited();
     public abstract void drawCompleted();
-    public abstract void draw(int color);
+    public abstract void draw(int color, boolean drawBorder);
 
     Set<MazeCell> getNeighbors() {
         return neighbors;
@@ -25,6 +25,12 @@ public abstract class MazeCell {
 
     void setNeighbors(Set<MazeCell> neighbors) {
         this.neighbors = neighbors;
+    }
+
+    void addNeighbor(MazeCell neighbor) {
+        if (this != neighbor) {
+            this.neighbors.add(neighbor);
+        }
     }
 
     boolean isVisited() {
