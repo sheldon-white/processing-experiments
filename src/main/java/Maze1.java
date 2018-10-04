@@ -111,7 +111,7 @@ public class Maze1 extends PApplet {
         } else if (!runners.isEmpty()) {
             advanceRunners();
         } else {
-            drawConnections(quadTree);
+            //drawConnections(quadTree);
             drawStartAndFinish();
         }
     }
@@ -312,6 +312,21 @@ public class Maze1 extends PApplet {
 
         public void draw(int color, boolean drawBorder) {
             drawQuad(this.bounds, color);
+        }
+
+        public void drawConnection(MazeCell other) {
+            RoundedMazeCell o = (RoundedMazeCell)other;
+            QuadRectangle m0 = this.bounds;
+            QuadRectangle m1 = o.bounds;
+            if (m0.x + m0.width == m1.x) {
+                drawHorizontal(m0, m1);
+            } else if (m1.x + m1.width == m0.x) {
+                drawHorizontal(m1, m0);
+            } else if (m0.y + m0.height == m1.y) {
+                drawVertical(m0, m1);
+            } else if (m1.y + m1.height == m0.y) {
+                drawVertical(m1, m0);
+            }
         }
     }
 }

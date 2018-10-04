@@ -34,7 +34,7 @@ class PathRunner {
             unvisitedNeighbor.setParent(current);
             unvisitedNeighbor.drawOccupied();
             current.drawVisited();
-            float replicationFrequency = 0.2F;
+            float replicationFrequency = 0.1F;
             if (random.nextFloat() < replicationFrequency) {
                 PathRunner newRunner = new PathRunner(this);
                 newRunner.place(current);
@@ -46,7 +46,7 @@ class PathRunner {
             MazeCell next = current.getParent();
             current.drawCompleted();
             if (next != null) {
-                next.drawCompleted();
+                current.drawConnection(next);
                 place(next);
                 if (!next.equals(start)) {
                     runners.add(this);

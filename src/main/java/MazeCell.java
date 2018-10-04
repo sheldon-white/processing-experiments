@@ -18,6 +18,7 @@ public abstract class MazeCell {
     public abstract void drawVisited();
     public abstract void drawCompleted();
     public abstract void draw(int color, boolean drawBorder);
+    public abstract void drawConnection(MazeCell other);
 
     Set<MazeCell> getNeighbors() {
         return neighbors;

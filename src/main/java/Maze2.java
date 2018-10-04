@@ -1,19 +1,17 @@
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import processing.core.PApplet;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Maze2 extends PApplet {
     private static final String NAME = "Maze2";
-    private int cellSize = 25;
+    private int cellSize = 40;
     private int halfCellSize = cellSize / 2;
     private final int visitedColor = color(220, 200, 200);
     private final int occupiedColor = color(180, 255, 180);
-    private final int completedColor = color(180, 180, 255);
-    private int outputWidth = 2000, outputHeight = 1500;
+    //private final int completedColor = color(180, 180, 255);
+    private int outputWidth = 800, outputHeight = 600;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 
@@ -62,19 +60,30 @@ public class Maze2 extends PApplet {
 
     @Override
     public void draw() {
-        if (!runners.isEmpty()) {
-            advanceRunners();
-        } else {
-            print("runners done!\n");
-            for (int x = 0; x < xcount; x++) {
-                for (int y = 0; y < ycount; y++) {
-                    drawWalls(x, y);
-                }
+        int ctr = 10;
+        while (ctr-- != 0) {
+            print("runners: ", runners.size(), "\n");
+            if (!runners.isEmpty()) {
+                advanceRunners();
+            } else {
+//                for (int x = 0; x < xcount; x++) {
+//                    for (int y = 0; y < ycount; y++) {
+//                        drawWalls(x, y);
+//                    }
+//                }
+                noLoop();
             }
-            noLoop();
         }
     }
 
+    @Override
+    public void keyPressed() {
+        if (key == ' ') {
+            //toggleSolution();
+        } else if (key == 's' || key == 'S') {
+            save(NAME + ".png");
+        }
+    }
     private void advanceRunners() {
         runners = runners.stream().flatMap(r -> r.advance().stream()).collect(Collectors.toSet());
     }
@@ -111,7 +120,7 @@ public class Maze2 extends PApplet {
     private void tesselateSquare(int xIndex, int yIndex) {
         int x = xIndex * cellSize;
         int y = yIndex * cellSize;
-
+        int color = color(220);
         IPoint ul = new IPoint(x, y);
         IPoint ur = new IPoint(x + cellSize, y);
         IPoint dl = new IPoint(x, y + cellSize);
@@ -127,126 +136,153 @@ public class Maze2 extends PApplet {
             case 0: {
                 SquareMazeCell s0 = new SquareMazeCell(x, y, cellSize, cellSize, qs);
                 qs.top = qs.left = qs.bottom = qs.right = s0;
-                s0.draw(randomColor(), true);
+                s0.draw(color, true);
                 break;
             }
             case 1: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,"ul");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,"rd");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,CellType.UL);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,CellType.DR);
                 qs.top = qs.left = t0;
                 qs.bottom = qs.right = t1;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
                 break;
             }
             case 2: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,"ur");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,"dl");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,CellType.UR);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,CellType.DL);
                 qs.top = qs.right = t0;
                 qs.bottom = qs.left = t1;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
                 break;
             }
             case 3: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,"u");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,"l");
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,"dr");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
+                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,CellType.DR);
                 qs.top = t0;
                 qs.left = t1;
                 qs.right = qs.bottom = t2;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
-                t2.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
+                t2.draw(color, true);
                 break;
             }
             case 4: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,"ul");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,"r");
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,"d");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,CellType.UL);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
+                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
                 qs.top = qs.left = t0;
                 qs.right = t1;
                 qs.bottom = t2;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
-                t2.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
+                t2.draw(color, true);
                 break;
             }
             case 5: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,"u");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,"r");
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,"dl");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
+                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,CellType.DL);
                 qs.top = t0;
                 qs.right = t1;
                 qs.bottom = qs.left = t2;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
-                t2.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
+                t2.draw(color, true);
                 break;
             }
             case 6: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,"ur");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,"l");
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,"d");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,CellType.UR);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
+                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
                 qs.top = qs.right = t0;
                 qs.left = t1;
                 qs.bottom = t2;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
-                t2.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
+                t2.draw(color, true);
                 break;
             }
             case 7: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,"u");
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,"l");
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,"d");
-                TriangularMazeCell t3 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,"r");
+                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
+                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
+                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
+                TriangularMazeCell t3 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
                 qs.top = t0;
                 qs.left = t1;
                 qs.bottom = t2;
                 qs.right = t3;
-                t0.draw(randomColor(), true);
-                t1.draw(randomColor(), true);
-                t2.draw(randomColor(), true);
-                t3.draw(randomColor(), true);
+                t0.draw(color, true);
+                t1.draw(color, true);
+                t2.draw(color, true);
+                t3.draw(color, true);
                 break;
             }
         }
-    }
-
-    private void drawWalls(int xIndex, int yIndex) {
-        int x = xIndex * cellSize;
-        int y = yIndex * cellSize;
-    }
-
-    private int randomColor() {
-        return color(128 + r.nextInt(128), 128 + r.nextInt(128), 128 + r.nextInt(128));
     }
 
     private void drawTriangle(Triangle t, int color, boolean drawBorder) {
         fill(color);
         if (drawBorder) {
             stroke(0);
-            strokeWeight(1);
+            strokeWeight(2);
         }
         context.triangle(t.p0.x, t.p0.y, t.p1.x, t.p1.y, t.p2.x, t.p2.y);
     }
 
-    public abstract class SignedMazeCell extends MazeCell {
-        private String signature;
-        private QuadState qs;
-
-        public SignedMazeCell(String signature, QuadState qs) {
-            super();
-            this.signature = signature;
-            this.qs = qs;
-        }
+    enum CellType {
+        LRUD,
+        U,
+        D,
+        L,
+        R,
+        UL,
+        UR,
+        DL,
+        DR
     }
+
+    public abstract class SignedMazeCell extends MazeCell {
+        private CellType cellType;
+        private QuadState qs;
+        private Map<SignedMazeCell, Integer> neighbors;
+        public SignedMazeCell(CellType cellType, QuadState qs) {
+            super();
+            this.cellType = cellType;
+            this.qs = qs;
+            this.neighbors = new HashMap<>();
+        }
+
+        public void addNeighbor(SignedMazeCell neighbor, int position) {
+            neighbors.put(neighbor, position);
+        }
+
+        public void drawConnection(MazeCell other) {
+            SignedMazeCell o = (SignedMazeCell)other;
+            strokeWeight(3);
+            stroke(255, 0, 0);
+            IPoint p0 = center();
+            IPoint p1 = o.center();
+            line(p0.x, p0.y, p1.x, p1.y);
+        }
+
+        public void drawOccupied() {
+        }
+        public void drawVisited() {
+        }
+        public void drawCompleted() {
+        }
+
+        public abstract IPoint center();
+    }
+
     class TriangularMazeCell extends SignedMazeCell {
         private Triangle t;
 
-        TriangularMazeCell(Triangle t, QuadState qs, String signature) {
-            super(signature, qs);
+        TriangularMazeCell(Triangle t, QuadState qs, CellType cellType) {
+            super(cellType, qs);
             this.t = t;
         }
 
@@ -254,20 +290,22 @@ public class Maze2 extends PApplet {
             return this == other;
         }
 
-        public void drawOccupied() {
-            this.draw(occupiedColor, true);
-        }
-
-        public void drawVisited() {
-            this.draw(visitedColor, true);
-        }
-
-        public void drawCompleted() {
-            this.draw(completedColor, true);
-        }
+//        public void drawOccupied() {
+//            this.draw(occupiedColor, true);
+//        }
+//
+//        public void drawVisited() {
+//            this.draw(visitedColor, true);
+//        }
+//
+//        public void drawCompleted() {}
 
         public void draw(int color, boolean drawBorder) {
             drawTriangle(t, color, drawBorder);
+        }
+
+        public IPoint center() {
+            return t.centroidCenter();
         }
     }
 
@@ -275,7 +313,7 @@ public class Maze2 extends PApplet {
         private int x, y, width, height;
 
         SquareMazeCell(int x, int y, int width, int height, QuadState qs) {
-            super("lrud", qs);
+            super(CellType.LRUD, qs);
             this.x = x;
             this.y = y;
             this.width = width;
@@ -285,28 +323,30 @@ public class Maze2 extends PApplet {
         public boolean equals(MazeCell other) {
             SignedMazeCell signedThis = this;
             SignedMazeCell signedOther = (SignedMazeCell)other;
-            return signedThis.qs == signedOther.qs && signedThis.signature.equals(signedOther.signature);
+            return signedThis.qs == signedOther.qs && signedThis.cellType == signedOther.cellType;
         }
 
-        public void drawOccupied() {
-            this.draw(occupiedColor, true);
-        }
-
-        public void drawVisited() {
-            this.draw(visitedColor, true);
-        }
-
-        public void drawCompleted() {
-            this.draw(completedColor, true);
-        }
+//        public void drawOccupied() {
+//            this.draw(occupiedColor, true);
+//        }
+//
+//        public void drawVisited() {
+//            this.draw(visitedColor, true);
+//        }
+//
+//        public void drawCompleted() {}
 
         public void draw(int color, boolean drawBorder) {
             fill(color);
             if (drawBorder) {
                 stroke(0);
-                strokeWeight(1);
+                strokeWeight(2);
             }
             rect(x, y, width, height);
+        }
+
+        public IPoint center() {
+            return new IPoint(x + width / 2, y + height/2);
         }
     }
 
