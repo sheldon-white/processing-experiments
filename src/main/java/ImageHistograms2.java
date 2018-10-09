@@ -46,7 +46,7 @@ public class ImageHistograms2 extends PApplet {
 //        strokeWeight(1);
 //        stroke(128);
         noStroke();
-        background(0);
+        background(80);
 
         StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, width, height), 0, 1, 4);
         Patch patch = new Patch();

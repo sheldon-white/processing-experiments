@@ -12,7 +12,7 @@ public class ImageHistograms1 extends PApplet {
     private PImage image;
     private int xOffset, yOffset;
     private int scoreThreshold = 50;
-    private static String imageName = "image3.jpg";
+    private static String imageName = "image4.jpg";
 
     public static void main(String args[]) {
         if (args.length > 0 && args[0] != null) {
@@ -50,14 +50,15 @@ public class ImageHistograms1 extends PApplet {
 
     @Override
     public void draw() {
-        for (int ctr = 0; ctr < 100; ctr++) {
+        if (patchQueue.size() > 0) {
+            print("queue: ", patchQueue.size(), "\n");
+        }
+        for (int ctr = 0; ctr < 20; ctr++) {
             Patch nextPatch = patchQueue.poll();
             if (nextPatch != null) {
                 if (nextPatch.score > scoreThreshold) {
-                    //print("quad: ", nextPatch.quad.x, nextPatch.quad.y, nextPatch.quad.width, nextPatch.quad.height, "\n");
-                    print("queue: ", patchQueue.size(), "\n");
-
                     QuadRectangle q = nextPatch.quad;
+                    nextPatch.erase();
                     double w2 = q.width / 2;
                     double h2 = q.height / 2;
                     if (w2 >= 4) {
@@ -77,6 +78,10 @@ public class ImageHistograms1 extends PApplet {
                         patchQueue.add(p1);
                         patchQueue.add(p2);
                         patchQueue.add(p3);
+                        p0.draw();
+                        p1.draw();
+                        p2.draw();
+                        p3.draw();
                     }
                 } else {
                     nextPatch.draw();
@@ -102,9 +107,16 @@ public class ImageHistograms1 extends PApplet {
         double error = 0, score = 0;
 
         public void draw() {
+//            fill(0);
+//            rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
             fill(color);
             //rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
             ellipse((float)(quad.x + quad.width / 2), (float)(quad.y + quad.height / 2), (float)quad.width, (float)quad.height);
+        }
+
+        public void erase() {
+            fill(0);
+            rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
         }
 
         private void hist(PImage image) {
