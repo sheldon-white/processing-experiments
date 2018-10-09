@@ -1,8 +1,9 @@
-import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import processing.core.PApplet;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Maze2 extends PApplet {
     private static final String NAME = "Maze2";
@@ -10,8 +11,8 @@ public class Maze2 extends PApplet {
     private int halfCellSize = cellSize / 2;
     private final int visitedColor = color(220, 200, 200);
     private final int occupiedColor = color(180, 255, 180);
-    //private final int completedColor = color(180, 180, 255);
-    private int outputWidth = 800, outputHeight = 600;
+    private final int completedColor = color(180, 180, 255);
+    private int outputWidth = 200, outputHeight = 200;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 
@@ -19,6 +20,39 @@ public class Maze2 extends PApplet {
     private Set<PathRunner> runners;
     private Random r = new Random();
     private static PApplet context;
+
+    class QuadState {
+        int xIndex;
+        int yIndex;
+        int wallState;
+        MazeCell top;
+        MazeCell bottom;
+        MazeCell left;
+        MazeCell right;
+    }
+
+    enum CellType {
+        U(0),
+        R(1),
+        D(2),
+        L(3);
+
+        int index;
+
+        static Map valueMap = EnumSet.allOf(CellType.class).stream().collect(Collectors.toMap(CellType::getIndex, Function.identity()));
+
+        CellType(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        boolean clockwiseFrom(CellType neighbor) {
+            return this.index == (neighbor.index + 1) % 4;
+        }
+    }
 
     public static void main(String args[]) {
         PApplet.main(NAME);
@@ -48,7 +82,8 @@ public class Maze2 extends PApplet {
             }
         }
         MazeCell start = quadStates[0][0].left;
-        placeInitialRunner(start);
+        //placeInitialRunner(start);
+        testConnections();
     }
 
     private void placeInitialRunner(MazeCell start) {
@@ -56,6 +91,14 @@ public class Maze2 extends PApplet {
         runner.place(start);
         start.setVisited();
         runners.add(runner);
+    }
+
+    private void testConnections() {
+        for (int x = 0; x < xcount; x++) {
+            for (int y = 0; y < ycount; y++) {
+            }
+        }
+
     }
 
     @Override
@@ -68,7 +111,11 @@ public class Maze2 extends PApplet {
             } else {
 //                for (int x = 0; x < xcount; x++) {
 //                    for (int y = 0; y < ycount; y++) {
-//                        drawWalls(x, y);
+//                        QuadState qs = quadStates[x][y];
+//                        qs.left.drawCompleted();
+//                        qs.right.drawCompleted();
+//                        qs.top.drawCompleted();
+//                        qs.bottom.drawCompleted();
 //                    }
 //                }
                 noLoop();
@@ -128,236 +175,169 @@ public class Maze2 extends PApplet {
         IPoint cen = new IPoint(x + halfCellSize, y + halfCellSize);
         QuadState qs = new QuadState();
         quadStates[xIndex][yIndex] = qs;
-        qs.wallState = r.nextInt(8);
+        //qs.wallState = r.nextInt(8);
+        qs.wallState = 7;
         qs.xIndex = xIndex;
         qs.yIndex = yIndex;
 
+        TriangularMazeCell u = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
+        TriangularMazeCell r = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
+        TriangularMazeCell d = new TriangularMazeCell(new Triangle(dr, dl, cen), qs,CellType.D);
+        TriangularMazeCell l = new TriangularMazeCell(new Triangle(dl, ul, cen), qs,CellType.L);
+        qs.top = u;
+        qs.left = l;
+        qs.bottom = d;
+        qs.right = r;
         switch (qs.wallState) {
             case 0: {
-                SquareMazeCell s0 = new SquareMazeCell(x, y, cellSize, cellSize, qs);
-                qs.top = qs.left = qs.bottom = qs.right = s0;
-                s0.draw(color, true);
+                // square
+                u.removeWall(1);
+                u.removeWall(2);
+                r.removeWall(1);
+                r.removeWall(2);
+                d.removeWall(1);
+                d.removeWall(2);
+                l.removeWall(1);
+                l.removeWall(2);
                 break;
             }
             case 1: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,CellType.UL);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,CellType.DR);
-                qs.top = qs.left = t0;
-                qs.bottom = qs.right = t1;
-                t0.draw(color, true);
-                t1.draw(color, true);
+                // UL, DR
+                u.removeWall(2);
+                l.removeWall(1);
+                d.removeWall(2);
+                r.removeWall(1);
                 break;
             }
             case 2: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,CellType.UR);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,CellType.DL);
-                qs.top = qs.right = t0;
-                qs.bottom = qs.left = t1;
-                t0.draw(color, true);
-                t1.draw(color, true);
+                // UR, DL
+                u.removeWall(1);
+                r.removeWall(2);
+                d.removeWall(1);
+                l.removeWall(2);
                 break;
             }
             case 3: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ur, dl, dr), qs,CellType.DR);
-                qs.top = t0;
-                qs.left = t1;
-                qs.right = qs.bottom = t2;
-                t0.draw(color, true);
-                t1.draw(color, true);
-                t2.draw(color, true);
+                // U, L, DR
+                r.removeWall(1);
+                d.removeWall(2);
                 break;
             }
             case 4: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dl), qs,CellType.UL);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
-                qs.top = qs.left = t0;
-                qs.right = t1;
-                qs.bottom = t2;
-                t0.draw(color, true);
-                t1.draw(color, true);
-                t2.draw(color, true);
+                // UL, D, R
+                u.removeWall(2);
+                l.removeWall(1);
                 break;
             }
             case 5: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(ul, dl, dr), qs,CellType.DL);
-                qs.top = t0;
-                qs.right = t1;
-                qs.bottom = qs.left = t2;
-                t0.draw(color, true);
-                t1.draw(color, true);
-                t2.draw(color, true);
+                // U, R, DL
+                d.removeWall(1);
+                l.removeWall(2);
                 break;
             }
             case 6: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, dr), qs,CellType.UR);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
-                qs.top = qs.right = t0;
-                qs.left = t1;
-                qs.bottom = t2;
-                t0.draw(color, true);
-                t1.draw(color, true);
-                t2.draw(color, true);
+                // UR, D, L
+                u.removeWall(1);
+                r.removeWall(2);
                 break;
             }
             case 7: {
-                TriangularMazeCell t0 = new TriangularMazeCell(new Triangle(ul, ur, cen), qs,CellType.U);
-                TriangularMazeCell t1 = new TriangularMazeCell(new Triangle(ul, dl, cen), qs,CellType.L);
-                TriangularMazeCell t2 = new TriangularMazeCell(new Triangle(dl, dr, cen), qs,CellType.D);
-                TriangularMazeCell t3 = new TriangularMazeCell(new Triangle(ur, dr, cen), qs,CellType.R);
-                qs.top = t0;
-                qs.left = t1;
-                qs.bottom = t2;
-                qs.right = t3;
-                t0.draw(color, true);
-                t1.draw(color, true);
-                t2.draw(color, true);
-                t3.draw(color, true);
+                // U, R, D, L
                 break;
             }
         }
+
+        u.draw(color, true);
+        r.draw(color, true);
+        d.draw(color, true);
+        l.draw(color, true);
     }
 
     private void drawTriangle(Triangle t, int color, boolean drawBorder) {
+        noStroke();
         fill(color);
+        context.triangle(t.p0.x, t.p0.y, t.p1.x, t.p1.y, t.p2.x, t.p2.y);
         if (drawBorder) {
             stroke(0);
             strokeWeight(2);
         }
-        context.triangle(t.p0.x, t.p0.y, t.p1.x, t.p1.y, t.p2.x, t.p2.y);
     }
 
-    enum CellType {
-        LRUD,
-        U,
-        D,
-        L,
-        R,
-        UL,
-        UR,
-        DL,
-        DR
-    }
-
-    public abstract class SignedMazeCell extends MazeCell {
+    class TriangularMazeCell extends MazeCell {
         private CellType cellType;
         private QuadState qs;
-        private Map<SignedMazeCell, Integer> neighbors;
-        public SignedMazeCell(CellType cellType, QuadState qs) {
-            super();
-            this.cellType = cellType;
-            this.qs = qs;
-            this.neighbors = new HashMap<>();
-        }
-
-        public void addNeighbor(SignedMazeCell neighbor, int position) {
-            neighbors.put(neighbor, position);
-        }
-
-        public void drawConnection(MazeCell other) {
-            SignedMazeCell o = (SignedMazeCell)other;
-            strokeWeight(3);
-            stroke(255, 0, 0);
-            IPoint p0 = center();
-            IPoint p1 = o.center();
-            line(p0.x, p0.y, p1.x, p1.y);
-        }
-
-        public void drawOccupied() {
-        }
-        public void drawVisited() {
-        }
-        public void drawCompleted() {
-        }
-
-        public abstract IPoint center();
-    }
-
-    class TriangularMazeCell extends SignedMazeCell {
+        Map<Integer, Boolean> walls;
         private Triangle t;
 
         TriangularMazeCell(Triangle t, QuadState qs, CellType cellType) {
-            super(cellType, qs);
+            this.cellType = cellType;
+            this.qs = qs;
+            this.walls = new HashMap<>();
             this.t = t;
+            this.walls = IntStream.range(0, 3).boxed().collect(Collectors.toMap(Function.identity(), b -> Boolean.TRUE));
         }
 
         public boolean equals(MazeCell other) {
             return this == other;
         }
 
-//        public void drawOccupied() {
-//            this.draw(occupiedColor, true);
-//        }
-//
-//        public void drawVisited() {
-//            this.draw(visitedColor, true);
-//        }
-//
-//        public void drawCompleted() {}
+        public void drawConnection(MazeCell other) {
+            TriangularMazeCell o = (TriangularMazeCell)other;
+            if (this.qs.xIndex != o.qs.xIndex || this.qs.yIndex != o.qs.yIndex) {
+                this.removeWall(0);
+                o.removeWall(0);
+            } else {
+                if (this.cellType.clockwiseFrom(o.cellType)) {
+                    this.removeWall(2);
+                    o.removeWall(1);
+                } else {
+                    this.removeWall(1);
+                    o.removeWall(2);
+                }
+            }
+            this.draw(visitedColor, true);
+            other.draw(visitedColor, true);
+        }
+
+        public void removeWall(int position) {
+            walls.put(position, false);
+        }
+
+        public void drawOccupied() {
+            this.draw(occupiedColor, true);
+        }
+
+        public void drawVisited() {
+            this.draw(visitedColor, true);
+        }
+
+        public void drawCompleted() {
+            this.draw(completedColor, true);
+        }
 
         public void draw(int color, boolean drawBorder) {
-            drawTriangle(t, color, drawBorder);
-        }
-
-        public IPoint center() {
-            return t.centroidCenter();
-        }
-    }
-
-    class SquareMazeCell extends SignedMazeCell {
-        private int x, y, width, height;
-
-        SquareMazeCell(int x, int y, int width, int height, QuadState qs) {
-            super(CellType.LRUD, qs);
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-
-        public boolean equals(MazeCell other) {
-            SignedMazeCell signedThis = this;
-            SignedMazeCell signedOther = (SignedMazeCell)other;
-            return signedThis.qs == signedOther.qs && signedThis.cellType == signedOther.cellType;
-        }
-
-//        public void drawOccupied() {
-//            this.draw(occupiedColor, true);
-//        }
-//
-//        public void drawVisited() {
-//            this.draw(visitedColor, true);
-//        }
-//
-//        public void drawCompleted() {}
-
-        public void draw(int color, boolean drawBorder) {
+            drawTriangle(t, color, false);
             fill(color);
             if (drawBorder) {
                 stroke(0);
-                strokeWeight(2);
+                strokeWeight(3);
+                for (int i = 0; i < 3; i++) {
+                    if (walls.get(i)) {
+                        switch (i) {
+                            case 0:
+                                line(t.p0.x, t.p0.y, t.p1.x, t.p1.y);
+                                break;
+                            case 1:
+                                line(t.p1.x, t.p1.y, t.p2.x, t.p2.y);
+                                break;
+                            case 2:
+                                line(t.p0.x, t.p0.y, t.p2.x, t.p2.y);
+                                break;
+                        }
+                    }
+                }
             }
-            rect(x, y, width, height);
         }
-
-        public IPoint center() {
-            return new IPoint(x + width / 2, y + height/2);
-        }
-    }
-
-    class QuadState {
-        int xIndex;
-        int yIndex;
-        int wallState;
-        MazeCell top;
-        MazeCell bottom;
-        MazeCell left;
-        MazeCell right;
     }
 }
 

@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 public class RandomText1 extends PApplet {
     private static final String NAME = "RandomText1";
     private Random random = new Random();
-    private Map<String, PFont> loadedFonts;
+    private Map<String, PFont> loadedFonts = new HashMap<>();
     private String[] fontNames = PFont.list();
     private List<String> dictionary;
-    private Set<DisplayedWord> displayedWords;
+    private Set<DisplayedWord> displayedWords = new HashSet<>();
 
     public static void main(String args[]) {
         PApplet.main(NAME);
@@ -29,9 +29,7 @@ public class RandomText1 extends PApplet {
 
     @Override
     public void setup() {
-        loadedFonts = new HashMap<>();
         dictionary = loadDictionary("/usr/share/dict/words");
-        displayedWords = new HashSet<>();
     }
 
     @Override

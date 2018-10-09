@@ -10,11 +10,11 @@ import java.util.Random;
 
 public class QuadtreeText1 extends PApplet {
     private static final String NAME = "QuadtreeText1";
-    private final int cellWidth = 50;
-    private final int cellHeight = 50;
+    private final int cellWidth = 10;
+    private final int cellHeight = 10;
 
-    private final int xcount = 80;
-    private final int ycount = 50;
+    private final int xcount = 150;
+    private final int ycount = 100;
 
     private Random random = new Random();
     private List<QuadRectangle> quadQueue;
@@ -55,7 +55,7 @@ public class QuadtreeText1 extends PApplet {
 
     private void fillQuadtree(StandardQuadTree<QuadRectangle> quadTree) {
         int emptyCells = xcount * ycount;
-        int maxX = 5;
+        int maxX = 12;
         int minX = 2;
         while (emptyCells > 0) {
             int ctr = 10000;
