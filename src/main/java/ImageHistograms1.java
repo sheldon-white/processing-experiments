@@ -13,6 +13,7 @@ public class ImageHistograms1 extends PApplet {
     private int xOffset, yOffset;
     private int scoreThreshold = 50;
     private static String imageName = "image4.jpg";
+    private int backgroundColor = 80;
 
     public static void main(String args[]) {
         if (args.length > 0 && args[0] != null) {
@@ -39,7 +40,7 @@ public class ImageHistograms1 extends PApplet {
 //        strokeWeight(1);
 //        stroke(128);
         noStroke();
-        background(0);
+        background(backgroundColor);
 
         StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, width, height), 0, 1, 4);
         Patch patch = new Patch();
@@ -58,33 +59,37 @@ public class ImageHistograms1 extends PApplet {
             if (nextPatch != null) {
                 if (nextPatch.score > scoreThreshold) {
                     QuadRectangle q = nextPatch.quad;
-                    nextPatch.erase();
                     double w2 = q.width / 2;
                     double h2 = q.height / 2;
                     if (w2 >= 4) {
+                        nextPatch.erase();
+
                         Patch p0 = new Patch();
                         p0.quad = new QuadRectangle(q.x, q.y, w2, h2);
                         p0.colorFromHistogram(image);
+                        patchQueue.add(p0);
+                        p0.draw();
+
                         Patch p1 = new Patch();
                         p1.quad = new QuadRectangle(q.x + w2, q.y, w2, h2);
                         p1.colorFromHistogram(image);
+                        patchQueue.add(p1);
+                        p1.draw();
+
                         Patch p2 = new Patch();
                         p2.quad = new QuadRectangle(q.x, q.y + h2, w2, h2);
                         p2.colorFromHistogram(image);
+                        patchQueue.add(p2);
+                        p2.draw();
+
                         Patch p3 = new Patch();
                         p3.quad = new QuadRectangle(q.x + w2, q.y + h2, w2, h2);
                         p3.colorFromHistogram(image);
-                        patchQueue.add(p0);
-                        patchQueue.add(p1);
-                        patchQueue.add(p2);
                         patchQueue.add(p3);
-                        p0.draw();
-                        p1.draw();
-                        p2.draw();
                         p3.draw();
+                    } else {
+                        nextPatch.draw();
                     }
-                } else {
-                    nextPatch.draw();
                 }
             }
         }
@@ -98,6 +103,7 @@ public class ImageHistograms1 extends PApplet {
     }
 
     class Patch {
+        boolean circleFill = true;
         QuadRectangle quad;
         int[] rHist = new int[256];
         int[] gHist = new int[256];
@@ -107,15 +113,20 @@ public class ImageHistograms1 extends PApplet {
         double error = 0, score = 0;
 
         public void draw() {
-//            fill(0);
-//            rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
             fill(color);
-            //rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
-            ellipse((float)(quad.x + quad.width / 2), (float)(quad.y + quad.height / 2), (float)quad.width, (float)quad.height);
+
+            if (circleFill) {
+                noStroke();
+                ellipse((float)(quad.x + quad.width / 2), (float)(quad.y + quad.height / 2), (float)quad.width, (float)quad.height);
+            } else {
+                strokeWeight(1);
+                stroke(128);
+                rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
+            }
         }
 
         public void erase() {
-            fill(0);
+            fill(backgroundColor);
             rect((float)quad.x, (float)quad.y, (float)quad.width, (float)quad.height);
         }
 
