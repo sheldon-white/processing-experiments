@@ -50,11 +50,11 @@ public class TilingTest1 extends PApplet {
 //    private TileSet buildTileSet() {
 //        float sqrt32 = (float)Math.sqrt(3.0) / 2;
 //        Tile s = new Tile('s',
-//                Arrays.asList(new FPoint(0, 0), new FPoint(0,1), new FPoint(1, 1), new FPoint(1, 0)));
+//                Arrays.asList(new flocks.FPoint(0, 0), new flocks.FPoint(0,1), new flocks.FPoint(1, 1), new flocks.FPoint(1, 0)));
 //        Tile t = new Tile('t',
-//                Arrays.asList(new FPoint(0, 0), new FPoint(0.5f, sqrt32), new FPoint(1, 0)));
+//                Arrays.asList(new flocks.FPoint(0, 0), new flocks.FPoint(0.5f, sqrt32), new flocks.FPoint(1, 0)));
 //        Tile h = new Tile('h',
-//                Arrays.asList(new FPoint(0, 0), new FPoint(-0.5f, sqrt32), new FPoint(0, 2 * sqrt32), new FPoint(1, 2 * sqrt32), new FPoint(1.5f, sqrt32), new FPoint(1, 0)));
+//                Arrays.asList(new flocks.FPoint(0, 0), new flocks.FPoint(-0.5f, sqrt32), new flocks.FPoint(0, 2 * sqrt32), new flocks.FPoint(1, 2 * sqrt32), new flocks.FPoint(1.5f, sqrt32), new flocks.FPoint(1, 0)));
 //        int vid = 0;
 //        Set<VertexRule> tilings = new HashSet<>();
 //        tilings.add(new VertexRule(vid++, Arrays.asList(s, s, s, s)));

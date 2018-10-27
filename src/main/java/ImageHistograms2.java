@@ -15,12 +15,12 @@ public class ImageHistograms2 extends PApplet {
     private PriorityQueue<Patch> patchQueue = new PriorityQueue<>(5,(a, b) -> (int)(b.score - a.score));
     private PImage image;
     private int xOffset, yOffset;
-    private int scoreThreshold = 50;
+    private int scoreThreshold = 80;
     private Random random = new Random();
     private Map<String, PFont> loadedFonts = new HashMap<>();
     private String[] fontNames = PFont.list();
-    private static String imageName = "image1.jpg";
-    private int backgroundColor = 20;
+    private static String imageName = "monalisa.jpg";
+    private int backgroundColor = 80;
 
     public static void main(String args[]) {
         if (args.length > 0 && args[0] != null) {
@@ -134,8 +134,10 @@ public class ImageHistograms2 extends PApplet {
             fill(color);
             int xoffset = (int)(quad.width * 0.2);
             int yoffset = (int)(quad.height * 0.8);
-            int c = 'A' + random.nextInt(25);
-            text((char)c, (float)(quad.x + xoffset), (float)(quad.y + yoffset));
+            int minChar = 0x4E00;
+            int maxChar = 0x9faf;
+            Character kanjiChar = (char)(minChar + random.nextInt(maxChar - minChar));
+            text(kanjiChar, (float)(quad.x + xoffset), (float)(quad.y + yoffset));
         }
 
         void erase() {

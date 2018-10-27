@@ -55,21 +55,6 @@ public class ImageDots1 extends PApplet {
         }
     }
 
-//    private void drawCircle(Circle c, int color) {
-//        noFill();
-//        strokeWeight(1);
-//        float x = (float)c.center.x;
-//        float y = (float)c.center.y;
-//        for (int r = c.radius; r > 0; r--) {
-//            double alpha = (30 - r) * 200d / 30;
-//            float w = 2 * (float)r;
-//            float h = w;
-//            int colorWithAlpha = (color & 0xffffff) | ((int)alpha << 24);
-//            stroke(colorWithAlpha);
-//            ellipse(x, y, w, h);
-//        }
-//    }
-
     private void drawCircle(Circle c, int color) {
         noStroke();
         int alpha = 128;

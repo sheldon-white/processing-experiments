@@ -95,7 +95,10 @@ public class Particles1 extends PApplet {
             int fontIdx = random.nextInt(loadedFonts.size());
             PFont font = loadedFonts.get(fontIdx);
             int color = color(56 + random.nextInt(200), 56 + random.nextInt(200), 56 + random.nextInt(200));
-            char c = (char)(33 + random.nextInt(94));
+            int minChar = 0x4E00;
+            int maxChar = 0x9faf;
+            char c = (char)(minChar + random.nextInt(maxChar - minChar));
+            //char c = (char)(33 + random.nextInt(94));
             Particle p = new CrazyParticle(origin, c, font, color);
             particles.add(p);
         }
@@ -184,7 +187,7 @@ public class Particles1 extends PApplet {
         void display() {
             pushMatrix();
             translate(position.x, position.y);
-            rotate(theta);
+            //rotate(theta);
             //stroke(255, lifespan);
             textFont(font);
             fill(color, lifespan);
