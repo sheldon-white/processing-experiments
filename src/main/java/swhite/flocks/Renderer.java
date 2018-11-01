@@ -1,4 +1,4 @@
-package flocks;
+package swhite.flocks;
 
 import processing.core.PApplet;
 

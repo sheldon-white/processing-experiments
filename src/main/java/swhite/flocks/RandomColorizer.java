@@ -1,24 +1,21 @@
-package flocks;
+package swhite.flocks;
 
 import processing.core.PApplet;
 
 import java.util.Random;
 
-public class UniformColorizer implements Colorizer {
-    private int color;
+public class RandomColorizer implements Colorizer {
+    public RandomColorizer() {
+    }
 
-    public UniformColorizer(PApplet context) {
+    @Override
+    public int nextColor(PApplet context) {
         int floor = 100;
         Random random = new Random();
         int r = floor + random.nextInt(256 - floor);
         int g = floor + random.nextInt(256 - floor);
         int b = floor + random.nextInt(256 - floor);
         int a = floor + random.nextInt(256 - floor);
-        color = context.color(r, g, b, a);
-    }
-
-    @Override
-    public int nextColor() {
-        return color;
+        return context.color(r, g, b, a);
     }
 }

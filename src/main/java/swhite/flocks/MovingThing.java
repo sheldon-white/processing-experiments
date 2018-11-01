@@ -1,16 +1,17 @@
-package flocks;
+package swhite.flocks;
 
 import processing.core.PApplet;
+import swhite.IntRect;
 
 public class MovingThing {
-    private FloatRect bounds;
+    private IntRect bounds;
     private int fillColor;
     private int strokeColor;
     private boolean stopped;
     private Renderer renderer;
 
-    public MovingThing(float x, float y, float w, float h, int fillColor, int strokeColor, Renderer renderer) {
-        this.bounds = new FloatRect(x, y, w, h);
+    public MovingThing(int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
+        this.bounds = new IntRect(x, y, w, h);
         this.fillColor = fillColor;
         this.strokeColor = strokeColor;
         this.stopped = false;
@@ -26,7 +27,7 @@ public class MovingThing {
         renderer.render(context, this);
     }
 
-    public FloatRect getBounds() {
+    public IntRect getBounds() {
         return bounds;
     }
 
