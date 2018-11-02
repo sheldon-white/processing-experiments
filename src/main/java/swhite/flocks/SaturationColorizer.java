@@ -9,7 +9,7 @@ import static processing.core.PConstants.HSB;
 public class SaturationColorizer implements Colorizer {
     private int saturation;
 
-    public SaturationColorizer() {
+    SaturationColorizer() {
         saturation = new Random().nextInt(256);
     }
 
@@ -21,7 +21,6 @@ public class SaturationColorizer implements Colorizer {
         int b = floor + random.nextInt(256 - floor);
         int a = floor + random.nextInt(256 - floor);
         context.colorMode(HSB, 256);
-        int hsb = context.color(h, b, saturation, a);
-        return hsb;
+        return context.color(h, b, saturation, a);
     }
 }

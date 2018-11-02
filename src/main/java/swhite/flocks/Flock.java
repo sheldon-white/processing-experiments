@@ -17,12 +17,12 @@ public class Flock {
     private boolean done = false;
     private IntRect contextBounds;
 
-    public Flock(PApplet context) {
+    private Flock(PApplet context) {
         this.context = context;
         this.contextBounds = new IntRect(0, 0, context.width, context.height);
     }
 
-    public static Flock build(PApplet context, Colorizer colorizer, ThingFactory thingFactory) {
+    static Flock build(PApplet context, Colorizer colorizer, ThingFactory thingFactory) {
         Flock flock = new Flock(context);
         Random random = new Random();
         float delta = (2 + random.nextFloat() * 3) * (random.nextBoolean() ? 1 : -1);
@@ -47,13 +47,13 @@ public class Flock {
             yOffset = (int)bounds.height * (delta > 0 ? -1 : 1);
         }
         for (IntRect cell: lattice.getCells()) {
-            flock.things.add(thingFactory.build(xOffset + cell.x, yOffset + cell.y, cell.w, cell.h, colorizer.nextColor(context), colorizer.nextColor(context)));
+            flock.things.add(thingFactory.build(context, xOffset + cell.x, yOffset + cell.y, cell.w, cell.h, colorizer.nextColor(context), colorizer.nextColor(context)));
         }
 
         return flock;
     }
 
-    public void advance() {
+    void advance() {
         boolean thingWasDisplayed = false;
         for (MovingThing thing: things) {
             thing.advance(deltaX, deltaY);

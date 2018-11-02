@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import java.util.Random;
 
 public class RandomColorizer implements Colorizer {
-    public RandomColorizer() {
+    RandomColorizer() {
     }
 
     @Override

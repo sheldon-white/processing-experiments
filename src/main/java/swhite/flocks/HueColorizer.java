@@ -9,7 +9,7 @@ import static processing.core.PConstants.HSB;
 public class HueColorizer implements Colorizer {
     private int hue;
 
-    public HueColorizer() {
+    HueColorizer() {
         hue = new Random().nextInt(256);
     }
 

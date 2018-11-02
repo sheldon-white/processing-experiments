@@ -1,5 +1,9 @@
 package swhite.flocks;
 
+import processing.core.PApplet;
+
 public interface ThingFactory {
-    public abstract MovingThing build(int x, int y, int w, int h, int fillColor, int strokeColor);
+    MovingThing build(PApplet context, int x, int y, int w, int h, int fillColor, int strokeColor);
+
+    ThingFactory createNew();
 }
