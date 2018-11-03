@@ -17,8 +17,8 @@ public class Lattice {
 
     private void init(int minWidth, int minHeight) {
         Random random = new Random();
-        int cellSize = 40 + random.nextInt(60);
-        int margin = 2 + random.nextInt(5);
+        int cellSize = 30 + random.nextInt(100);
+        int margin = (int)(cellSize * 0.05) + random.nextInt((int)(cellSize * 0.1));
         int rectSize = cellSize - 2 * margin;
         int xOffset = random.nextInt(cellSize);
         int yOffset = random.nextInt(cellSize);

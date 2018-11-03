@@ -18,10 +18,10 @@ public class ImageHistograms2 extends PApplet {
     private PImage image;
     private int xOffset, yOffset;
     private Random random = new Random();
-    private Map<String, PFont> loadedFonts = new HashMap<>();
-    private String[] fontNames = PFont.list();
+    private FontLoader fontLoader = new FontLoader();
     private static String imageName = "monalisa.jpg";
     private int backgroundColor = 80;
+    private PApplet context = this;
 
     public static void main(String args[]) {
         if (args.length > 0 && args[0] != null) {
@@ -111,15 +111,6 @@ public class ImageHistograms2 extends PApplet {
         }
     }
 
-    private PFont getRandomFont(Integer size) {
-        String fontName = fontNames[random.nextInt(fontNames.length - 1)];
-        String key = size + "-" + fontName;
-        if (!loadedFonts.containsKey(key)) {
-            loadedFonts.put(key, createFont(fontName, size));
-        }
-        return loadedFonts.get(key);
-    }
-
     class Patch {
         QuadRectangle quad;
         int[] rHist = new int[256];
@@ -131,7 +122,7 @@ public class ImageHistograms2 extends PApplet {
 
         public void draw() {
             erase();
-            PFont font = getRandomFont((int)quad.height);
+            PFont font = fontLoader.getRandomFont(context, (int)quad.height);
             textFont(font);
             fill(color);
             int xoffset = (int)(quad.width * 0.2);

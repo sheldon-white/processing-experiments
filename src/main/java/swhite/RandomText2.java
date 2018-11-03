@@ -9,8 +9,7 @@ import java.util.stream.Collectors;
 public class RandomText2 extends PApplet {
     private static final String NAME = "RandomText2";
     private Random random = new Random();
-    private Map<String, PFont> loadedFonts = new HashMap<>();
-    private String[] fontNames = PFont.list();
+    private FontLoader fontLoader = new FontLoader();
     private Set<DisplayedKanji> displayedKanjis = new HashSet<>();
 
     public static void main(String args[]) {
@@ -40,15 +39,6 @@ public class RandomText2 extends PApplet {
         displayedKanjis = displayedKanjis.stream().filter(w -> w.alpha >= 0).map(DisplayedKanji::draw).collect(Collectors.toSet());
     }
 
-    private PFont getRandomFont(Integer size) {
-        String fontName = fontNames[random.nextInt(fontNames.length - 1)];
-        String key = size + "-" + fontName;
-        if (!loadedFonts.containsKey(key)) {
-            loadedFonts.put(key, createFont(fontName, size));
-        }
-        return loadedFonts.get(key);
-    }
-
     private DisplayedKanji newWord() {
         // Common and uncommon kanji ( 4e00 - 9faf)
         int minChar = 0x4E00;
@@ -59,7 +49,7 @@ public class RandomText2 extends PApplet {
         displayedKanji.y = random.nextInt(width);
         displayedKanji.kanjiChar = (char)(minChar + random.nextInt(maxChar - minChar));
         int fontSize = 10 + random.nextInt(100);
-        displayedKanji.font = getRandomFont(fontSize);
+        displayedKanji.font = fontLoader.getRandomFont(this, fontSize);
         displayedKanji.color = color(56 + random.nextInt(200), 56 + random.nextInt(200), 56 + random.nextInt(200));
         displayedKanji.theta = 2 * PI * random.nextFloat();
         displayedKanji.alpha = 255;

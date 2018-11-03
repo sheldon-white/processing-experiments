@@ -3,6 +3,7 @@ package swhite.flocks;
 import com.google.common.collect.Lists;
 import processing.core.PApplet;
 import processing.core.PFont;
+import swhite.FontLoader;
 import swhite.IntRect;
 import swhite.ShapeUtils;
 import swhite.Triangle;
@@ -14,13 +15,20 @@ public class Flock1 extends PApplet {
     private static final String NAME = "swhite.flocks.Flock1";
     private List<Flock> flocks = new ArrayList<>();
     private int minFlockCount = 10;
+    private FontLoader fontLoader = new FontLoader();
 
     private List<ThingFactory> thingFactories = Lists.newArrayList(
+            new CharacterFactory(33, 254), // printable ascii
             new CircleFactory(),
-            new LetterFactory(),
+            new CharacterFactory(0x400, 0x4ff), // cyrillic
+            new CharacterFactory(0x370, 0x3ff), // greek and coptic
+            new CharacterFactory('A', 'Z'), // upper case
+            new CharacterFactory('a', 'z'), // lower case
             new TriangleFactory(),
             new StarFactory(),
-            new KanjiFactory());
+            new CharacterFactory(0x4E00, 0x9faf) // kanji
+    );
+
     private List<ColorizerFactory> colorizerFactories = Lists.newArrayList(
             new HueColorizerFactory(),
             new BrightnessColorizerFactory(),
@@ -43,6 +51,45 @@ public class Flock1 extends PApplet {
 
         public ThingFactory createNew() {
             return new CircleFactory();
+        }
+    }
+
+    private class CharacterFactory implements ThingFactory {
+        PFont font;
+        int minCharacter, maxCharacter;
+
+        CharacterFactory(int minCharacter, int maxCharacter) {
+            this.minCharacter = minCharacter;
+            this.maxCharacter = maxCharacter;
+        }
+
+        private class MovingCharacter extends MovingThing {
+            Character character;
+
+            MovingCharacter(int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
+                super(x, y, w, h, fillColor, strokeColor, renderer);
+                Random random = new Random();
+                character = (char)(minCharacter + random.nextInt(maxCharacter - minCharacter + 1));
+            }
+        }
+
+        private Renderer renderer = (context, thing) -> {
+            MovingCharacter letter = (MovingCharacter) thing;
+            context.textFont(font);
+            context.fill(letter.getFillColor());
+            IntRect bounds = letter.getBounds();
+            context.text(letter.character, (float)bounds.x, (float)bounds.y);
+        };
+
+        public MovingThing build(PApplet context, int x, int y, int w, int h, int fillColor, int strokeColor) {
+            if (font == null) {
+                font = fontLoader.getRandomFont(context, (int)(h * 0.75));
+            }
+            return new MovingCharacter(x, y, w, h, fillColor, strokeColor, renderer);
+        }
+
+        public ThingFactory createNew() {
+            return new CharacterFactory(minCharacter, maxCharacter);
         }
     }
 
@@ -135,77 +182,6 @@ public class Flock1 extends PApplet {
         }
     }
 
-    private class KanjiFactory implements ThingFactory {
-        private class MovingKanji extends MovingThing {
-            int minChar = 0x4E00;
-            int maxChar = 0x9faf;
-            Character character;
-            PFont font;
-
-            MovingKanji(PFont font, int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
-                super(x, y, w, h, fillColor, strokeColor, renderer);
-                this.font = font;
-                Random random = new Random();
-                character = (char)(minChar + random.nextInt(maxChar - minChar));
-            }
-        }
-
-        private Renderer renderer = (context, thing) -> {
-            MovingKanji kanji = (MovingKanji) thing;
-            context.textFont(kanji.font);
-            context.fill(kanji.getFillColor());
-            IntRect bounds = kanji.getBounds();
-            context.text(kanji.character, (float)bounds.x, (float)bounds.y);
-        };
-
-        public MovingThing build(PApplet context, int x, int y, int w, int h, int fillColor, int strokeColor) {
-            PFont font = getRandomFont(context, (int)(h * 0.75));
-            return new MovingKanji(font, x, y, w, h, fillColor, strokeColor, renderer);
-        }
-
-        public ThingFactory createNew() {
-            return new KanjiFactory();
-        }
-    }
-
-    private class LetterFactory implements ThingFactory {
-        PFont font;
-
-        LetterFactory() {
-        }
-
-        private class MovingLetter extends MovingThing {
-            Character character;
-
-            MovingLetter(int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
-                super(x, y, w, h, fillColor, strokeColor, renderer);
-                Random random = new Random();
-                Boolean upperCase = random.nextBoolean();
-                char minChar = upperCase ? 'A' : 'a';
-                character = (char)(minChar + random.nextInt(26));
-            }
-        }
-
-        private Renderer renderer = (context, thing) -> {
-            MovingLetter letter = (MovingLetter) thing;
-            context.textFont(font);
-            context.fill(letter.getFillColor());
-            IntRect bounds = letter.getBounds();
-            context.text(letter.character, (float)bounds.x, (float)bounds.y);
-        };
-
-        public MovingThing build(PApplet context, int x, int y, int w, int h, int fillColor, int strokeColor) {
-            if (font == null) {
-                font = getRandomFont(context, (int)(h * 0.75));
-            }
-            return new MovingLetter(x, y, w, h, fillColor, strokeColor, renderer);
-        }
-
-        public ThingFactory createNew() {
-            return new LetterFactory();
-        }
-    }
-
     private class HueColorizerFactory implements ColorizerFactory {
         public Colorizer build() {
             return new HueColorizer();
@@ -252,7 +228,8 @@ public class Flock1 extends PApplet {
 
     @Override
     public void draw() {
-        background(180);
+        background(nextColor());
+
         flocks = flocks.stream().filter(f -> {
             f.advance();
             return !f.done();
@@ -263,6 +240,30 @@ public class Flock1 extends PApplet {
         }
     }
 
+    private int t = 0;
+    private float dr, dg, db, r0, g0, b0;
+
+    private int nextColor() {
+        if (t == 0) {
+            Random random = new Random();
+            dr = 0.005f * random.nextFloat();
+            dg = 0.005f * random.nextFloat();
+            db = 0.005f * random.nextFloat();
+            r0 = random.nextFloat();
+            g0 = random.nextFloat();
+            b0 = random.nextFloat();
+        }
+        colorMode(RGB);
+        float minVal = 100;
+        float maxVal = 220;
+        float r = minVal + 0.5f * (maxVal - minVal) * (1 + sin(t * dr + r0));
+        float g = minVal + 0.5f * (maxVal - minVal) * (1 + sin(t * dg + g0));
+        float b = minVal + 0.5f * (maxVal - minVal) * (1 + sin(t * db + b0));
+        //println(r, g, b);
+        t++;
+        return color(r, g, b);
+    }
+
     private Flock newFlock() {
         Flock flock;
         Random random = new Random();
@@ -270,18 +271,5 @@ public class Flock1 extends PApplet {
         ColorizerFactory colorizerFactory = colorizerFactories.get(random.nextInt(colorizerFactories.size()));
         flock = Flock.build(this, colorizerFactory.build(), thingFactory.createNew());
         return flock;
-    }
-
-    private Map<String, PFont> loadedFonts = new HashMap<>();
-    private String[] fontNames = PFont.list();
-
-    private PFont getRandomFont(PApplet context, int size) {
-        Random random = new Random();
-        String fontName = fontNames[random.nextInt(fontNames.length - 1)];
-        String key = size + "-" + fontName;
-        if (!loadedFonts.containsKey(key)) {
-            loadedFonts.put(key, context.createFont(fontName, size));
-        }
-        return loadedFonts.get(key);
     }
 }

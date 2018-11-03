@@ -15,6 +15,7 @@ public class RandomText1 extends PApplet {
     private String[] fontNames = PFont.list();
     private List<String> dictionary;
     private Set<DisplayedWord> displayedWords = new HashSet<>();
+    private FontLoader fontLoader = new FontLoader();
 
     public static void main(String args[]) {
         PApplet.main(NAME);
@@ -44,22 +45,13 @@ public class RandomText1 extends PApplet {
         displayedWords = displayedWords.stream().filter(w -> w.alpha >= 0).map(DisplayedWord::draw).collect(Collectors.toSet());
     }
 
-    private PFont getRandomFont(Integer size) {
-        String fontName = fontNames[random.nextInt(fontNames.length - 1)];
-        String key = size + "-" + fontName;
-        if (!loadedFonts.containsKey(key)) {
-            loadedFonts.put(key, createFont(fontName, size));
-        }
-        return loadedFonts.get(key);
-    }
-
     private DisplayedWord newWord() {
         DisplayedWord displayedWord = new DisplayedWord();
         displayedWord.x = random.nextInt(width);
         displayedWord.y = random.nextInt(width);
         displayedWord.word = dictionary.get(random.nextInt(dictionary.size()));
         int fontSize = 10 + random.nextInt(100);
-        displayedWord.font = getRandomFont(fontSize);
+        displayedWord.font = fontLoader.getRandomFont(this, fontSize);
         displayedWord.color = color(56 + random.nextInt(200), 56 + random.nextInt(200), 56 + random.nextInt(200));
         displayedWord.theta = 2 * PI * random.nextFloat();
         displayedWord.alpha = 255;

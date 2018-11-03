@@ -20,8 +20,7 @@ public class QuadtreeText1 extends PApplet {
 
     private Random random = new Random();
     private List<QuadRectangle> quadQueue;
-    private Map<String, PFont> loadedFonts;
-    private String[] fontNames = PFont.list();
+    private FontLoader fontLoader = new FontLoader();
 
     public static void main(String args[]) {
         PApplet.main(NAME);
@@ -36,7 +35,6 @@ public class QuadtreeText1 extends PApplet {
 
     @Override
     public void setup() {
-        loadedFonts = new HashMap<>();
         StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
         background(100);
         //noStroke();
@@ -44,15 +42,6 @@ public class QuadtreeText1 extends PApplet {
 //        strokeWeight(1.5F);
         fillQuadtree(quadTree);
         quadQueue = quadTree.getElements(quadTree.getZone());
-    }
-
-    private PFont getRandomFont(Integer size) {
-        String fontName = fontNames[random.nextInt(fontNames.length - 1)];
-        String key = size + "-" + fontName;
-        if (!loadedFonts.containsKey(key)) {
-            loadedFonts.put(key, createFont(fontName, size));
-        }
-        return loadedFonts.get(key);
     }
 
     private void fillQuadtree(StandardQuadTree<QuadRectangle> quadTree) {
@@ -119,7 +108,7 @@ public class QuadtreeText1 extends PApplet {
         float h = (float)q.height * cellHeight;
         int xoffset = (int)(w * 0.2);
         int yoffset = (int)(h * 0.8);
-        PFont font = getRandomFont(yoffset);
+        PFont font = fontLoader.getRandomFont(this, yoffset);
         textFont(font);
         fill(color);
         int c = 'A' + random.nextInt(25);
