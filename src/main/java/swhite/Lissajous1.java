@@ -3,10 +3,11 @@ package swhite;
 import javafx.geometry.Point3D;
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class Lissajous1 extends PApplet {
-    private static final String NAME = "Lissajous1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int time;
     private int displayWidth = 1000;
     private int displayHeight = 1000;

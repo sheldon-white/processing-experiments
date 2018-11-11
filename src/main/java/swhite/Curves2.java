@@ -2,12 +2,13 @@ package swhite;
 
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Curves2 extends PApplet {
-    private static final String NAME = "Curves2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int outputWidth = 1500, outputHeight = 1000;
     private int cellSize = 80;
     private int xcount = outputWidth / cellSize;

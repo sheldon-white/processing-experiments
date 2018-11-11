@@ -8,11 +8,12 @@ import swhite.IntRect;
 import swhite.ShapeUtils;
 import swhite.Triangle;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Flock1 extends PApplet {
-    private static final String NAME = "swhite.flocks.Flock1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private List<Flock> flocks = new ArrayList<>();
     private int minFlockCount = 10;
     private FontLoader fontLoader = new FontLoader();

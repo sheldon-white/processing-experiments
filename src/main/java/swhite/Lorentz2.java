@@ -3,13 +3,14 @@ package swhite;
 import javafx.geometry.Point3D;
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Lorentz2 extends PApplet {
-    private static final String NAME = "Lorentz2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private List<DisplayedPoint> displayedPoints = new ArrayList<>();
 
     public Lorentz2() {

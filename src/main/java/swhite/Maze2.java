@@ -2,13 +2,14 @@ package swhite;
 
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Maze2 extends PApplet {
-    private static final String NAME = "Maze2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int cellSize = 40;
     private int halfCellSize = cellSize / 2;
     private final int visitedColor = color(220, 200, 200);

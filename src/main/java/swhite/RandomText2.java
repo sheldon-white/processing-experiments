@@ -3,11 +3,12 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RandomText2 extends PApplet {
-    private static final String NAME = "RandomText2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private Random random = new Random();
     private FontLoader fontLoader = new FontLoader();
     private Set<DisplayedKanji> displayedKanjis = new HashSet<>();

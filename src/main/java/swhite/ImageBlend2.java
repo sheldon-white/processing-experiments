@@ -3,8 +3,10 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
+
 public class ImageBlend2 extends PApplet {
-    private static final String NAME = "ImageBlend2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int outputWidth = 1500, outputHeight = 1000;
 
     private PImage img1, img2;

@@ -2,10 +2,11 @@ package swhite;
 
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class Distribution2 extends PApplet {
-    private static final String NAME = "Distribution2";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int cellSize = 60;
     private int outputWidth = 1500, outputHeight = 1000;
     private int xcount = outputWidth / cellSize;

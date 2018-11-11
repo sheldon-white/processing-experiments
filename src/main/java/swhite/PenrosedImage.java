@@ -3,11 +3,12 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class PenrosedImage extends PApplet {
-    private static final String NAME = "PenrosedImage";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private static final float GOLDEN_RATIO = (1 + sqrt(5)) / 2;
     private int imgOffsetX, imgOffsetY, penroseSize;
 

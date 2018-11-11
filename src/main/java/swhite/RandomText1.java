@@ -5,11 +5,12 @@ import processing.core.PFont;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RandomText1 extends PApplet {
-    private static final String NAME = "RandomText1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private Random random = new Random();
     private Map<String, PFont> loadedFonts = new HashMap<>();
     private String[] fontNames = PFont.list();

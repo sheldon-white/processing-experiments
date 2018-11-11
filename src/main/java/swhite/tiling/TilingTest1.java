@@ -3,13 +3,14 @@ package swhite.tiling;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class TilingTest1 extends PApplet {
-    private static final String NAME = "tiling.TilingTest1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int outputWidth = 1000, outputHeight = 800;
 
     private PImage img;

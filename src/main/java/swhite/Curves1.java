@@ -2,12 +2,13 @@ package swhite;
 
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Curves1 extends PApplet {
-    private static final String NAME = "Curves1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private static final double TWO_PI = Math.PI * 2;
     private int outputWidth = 1500, outputHeight = 1000;
     private Random r = new Random();

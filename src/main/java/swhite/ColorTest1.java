@@ -2,10 +2,11 @@ package swhite;
 
 import processing.core.PApplet;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class ColorTest1 extends PApplet {
-    private static final String NAME = "ColorTest1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
 
     private Random r = new Random();
 

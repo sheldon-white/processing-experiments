@@ -5,11 +5,12 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Random;
 
 public class QuadtreeTest1 extends PApplet {
-    private static final String NAME = "QuadtreeTest1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
 
     private Random r = new Random();
     private PImage img;

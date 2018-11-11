@@ -3,10 +3,11 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class StripedImage extends PApplet {
-    private static final String NAME = "StripedImage";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int stripeWidth = 10;
 
     private PImage img;

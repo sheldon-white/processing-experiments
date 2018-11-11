@@ -3,10 +3,11 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class Tesselation1 extends PApplet {
-    private static final String NAME = "Tesselation1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int cellSize = 100;
     private int halfCellSize = cellSize / 2;
     private int outputWidth = 2200, outputHeight = 2900;

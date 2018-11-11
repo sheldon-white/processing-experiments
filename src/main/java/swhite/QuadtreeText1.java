@@ -5,13 +5,14 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class QuadtreeText1 extends PApplet {
-    private static final String NAME = "QuadtreeText1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private final int cellWidth = 10;
     private final int cellHeight = 10;
 

@@ -5,10 +5,11 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 public class ImageHistograms1 extends PApplet {
-    private static final String NAME = "ImageHistograms1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
 
     private PriorityQueue<Patch> patchQueue = new PriorityQueue<>(5,(a, b) -> (int)(b.score - a.score));
     private PImage image;

@@ -3,10 +3,11 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
 
 public class ImageDots1 extends PApplet {
-    private static final String NAME = "ImageDots1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
 
     private Random r = new Random();
     private static String imageName = "image4.jpg";
