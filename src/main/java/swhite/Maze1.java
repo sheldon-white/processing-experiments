@@ -5,7 +5,10 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Maze1 extends PApplet {

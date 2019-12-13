@@ -7,8 +7,6 @@ import processing.core.PFont;
 import processing.core.PImage;
 
 import java.lang.invoke.MethodHandles;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 

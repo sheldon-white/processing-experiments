@@ -3,8 +3,9 @@ package swhite;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class FontLoader {
     private Map<String, PFont> loadedFonts;

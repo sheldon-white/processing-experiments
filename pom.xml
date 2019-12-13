@@ -14,6 +14,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>ICM</id>
+            <name>ICM</name>
+            <url>http://maven.icm.edu.pl/artifactory/repo</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.processing</groupId>
@@ -21,9 +29,9 @@
             <version>3.3.6</version>
         </dependency>
         <dependency>
-            <groupId>hypeframework</groupId>
-            <artifactId>HYPE_processing</artifactId>
-            <version>1.0</version>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>13</version>
         </dependency>
         <dependency>
             <groupId>org.datasyslab</groupId>

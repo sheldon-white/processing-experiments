@@ -2,12 +2,8 @@ package swhite;
 
 import javafx.geometry.Point3D;
 import processing.core.PApplet;
-import processing.core.PFont;
-import sun.security.util.DisabledAlgorithmConstraints;
 
 import java.lang.invoke.MethodHandles;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Lorentz1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();

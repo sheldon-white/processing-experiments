@@ -1,6 +1,5 @@
 package swhite;
 
-import javafx.geometry.Point3D;
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;

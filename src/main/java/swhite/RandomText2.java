@@ -4,7 +4,9 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 import java.lang.invoke.MethodHandles;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RandomText2 extends PApplet {
