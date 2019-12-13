@@ -52,7 +52,7 @@ public class PenrosedImage extends PApplet {
                 t.draw();
             }
         });
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

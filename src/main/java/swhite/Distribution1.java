@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Distribution1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 60;
-    private int outputWidth = 1500, outputHeight = 1000;
+    private int cellSize = 50;
+    private int outputWidth = 3000, outputHeight = 2000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
     private Random r = new Random();
@@ -37,7 +37,7 @@ public class Distribution1 extends PApplet {
             }
         }
 
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

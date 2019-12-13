@@ -131,7 +131,7 @@ public class Maze2 extends PApplet {
         if (key == ' ') {
             //toggleSolution();
         } else if (key == 's' || key == 'S') {
-            save(NAME + ".png");
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         }
     }
     private void advanceRunners() {

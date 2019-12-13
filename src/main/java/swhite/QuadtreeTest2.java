@@ -82,7 +82,7 @@ public class QuadtreeTest2 extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 's' || key == 'S') {
-            save(NAME + ".png");
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         }
     }
 }

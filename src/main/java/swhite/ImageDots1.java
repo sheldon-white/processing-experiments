@@ -52,7 +52,7 @@ public class ImageDots1 extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 's' || key == 'S') {
-            save(NAME + ".png");
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         } else if (key == 'd' || key == 'D') {
             noLoop();
         }

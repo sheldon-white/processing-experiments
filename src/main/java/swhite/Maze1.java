@@ -154,7 +154,7 @@ public class Maze1 extends PApplet {
         if (key == ' ') {
             toggleSolution();
         } else if (key == 's' || key == 'S') {
-            save(NAME + ".png");
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         }
     }
 

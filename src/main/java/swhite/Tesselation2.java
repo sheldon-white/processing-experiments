@@ -40,7 +40,7 @@ public class Tesselation2 extends PApplet {
                 tesselateSquare(x, y);
             }
         }
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

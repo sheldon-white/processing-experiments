@@ -14,8 +14,8 @@ public class QuadtreeText1 extends PApplet {
     private final int cellWidth = 10;
     private final int cellHeight = 10;
 
-    private final int xcount = 150;
-    private final int ycount = 100;
+    private final int xcount = 300;
+    private final int ycount = 200;
 
     private Random random = new Random();
     private List<QuadRectangle> quadQueue;
@@ -96,7 +96,7 @@ public class QuadtreeText1 extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 's' || key == 'S') {
-            save(NAME + ".png");
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         }
     }
 

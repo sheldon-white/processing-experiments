@@ -42,7 +42,7 @@ public class ImageBlend2 extends PApplet {
                 point(x, y);
             }
         }
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

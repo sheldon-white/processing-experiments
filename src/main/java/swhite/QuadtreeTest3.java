@@ -81,7 +81,7 @@ public class QuadtreeTest3 extends PApplet {
             }
         }
 
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

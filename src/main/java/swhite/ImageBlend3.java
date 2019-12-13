@@ -69,7 +69,7 @@ public class ImageBlend3 extends PApplet {
                 rect(x * cellSize + 4, y * cellSize + 4, cellSize - 8, cellSize - 8);
             }
         }
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }

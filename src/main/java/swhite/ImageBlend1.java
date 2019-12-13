@@ -54,7 +54,7 @@ public class ImageBlend1 extends PApplet {
                 }
             }
         }
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         print("Done!\n");
         noLoop();
     }
