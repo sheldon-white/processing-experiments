@@ -14,7 +14,7 @@ public class ImageHistograms1 extends PApplet {
     private PriorityQueue<Patch> patchQueue = new PriorityQueue<>(5,(a, b) -> (int)(b.score - a.score));
     private PImage image;
     private int xOffset, yOffset;
-    private static String imageName = "image4.jpg";
+    private static String imageName = "image6.jpg";
     private int backgroundColor = 80;
 
     public static void main(String args[]) {
@@ -56,7 +56,7 @@ public class ImageHistograms1 extends PApplet {
         if (patchQueue.size() > 0) {
             print("queue: ", patchQueue.size(), "\n");
         }
-        for (int ctr = 0; ctr < 20; ctr++) {
+        for (int ctr = 0; ctr < 200; ctr++) {
             Patch nextPatch = patchQueue.poll();
             if (nextPatch != null) {
                 int scoreThreshold = 50;

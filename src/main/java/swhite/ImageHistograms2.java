@@ -20,7 +20,7 @@ public class ImageHistograms2 extends PApplet {
     private int xOffset, yOffset;
     private Random random = new Random();
     private FontLoader fontLoader = new FontLoader();
-    private static String imageName = "monalisa.jpg";
+    private static String imageName = "image6.jpg";
     private int backgroundColor = 80;
     private PApplet context = this;
 
@@ -46,8 +46,6 @@ public class ImageHistograms2 extends PApplet {
     @Override
     public void setup() {
         colorMode(RGB, 255);
-//        strokeWeight(1);
-//        stroke(128);
         noStroke();
         background(backgroundColor);
 
@@ -63,7 +61,7 @@ public class ImageHistograms2 extends PApplet {
         if (patchQueue.size() > 0) {
             print("queue: ", patchQueue.size(), "\n");
         }
-        for (int ctr = 0; ctr < 20; ctr++) {
+        for (int ctr = 0; ctr < 1000; ctr++) {
             Patch nextPatch = patchQueue.poll();
             if (nextPatch != null) {
                 int scoreThreshold = 80;
