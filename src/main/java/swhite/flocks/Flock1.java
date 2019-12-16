@@ -72,7 +72,7 @@ public class Flock1 extends PApplet {
             MovingCharacter(int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
                 super(x, y, w, h, fillColor, strokeColor, renderer);
                 Random random = new Random();
-                character = (char)(minCharacter + random.nextInt(maxCharacter - minCharacter + 1));
+                character = (char) (minCharacter + random.nextInt(maxCharacter - minCharacter + 1));
             }
         }
 
@@ -81,12 +81,12 @@ public class Flock1 extends PApplet {
             context.textFont(font);
             context.fill(letter.getFillColor());
             IntRect bounds = letter.getBounds();
-            context.text(letter.character, (float)bounds.x, (float)bounds.y);
+            context.text(letter.character, (float) bounds.x, (float) bounds.y);
         };
 
         public MovingThing build(PApplet context, int x, int y, int w, int h, int fillColor, int strokeColor) {
             if (font == null) {
-                font = fontLoader.getRandomFont(context, (int)(h * 0.75));
+                font = fontLoader.getRandomFont(context, (int) (h * 0.75));
             }
             return new MovingCharacter(x, y, w, h, fillColor, strokeColor, renderer);
         }
@@ -96,10 +96,10 @@ public class Flock1 extends PApplet {
         }
     }
 
-    private class TriangleFactory implements ThingFactory {
+    private static class TriangleFactory implements ThingFactory {
         Triangle triangle;
 
-        private class MovingTriangle extends MovingThing {
+        private static class MovingTriangle extends MovingThing {
             Triangle triangle;
 
             MovingTriangle(Triangle triangle, int x, int y, int w, int h, int fillColor, int strokeColor, Renderer renderer) {
@@ -160,8 +160,8 @@ public class Flock1 extends PApplet {
             Random random = new Random();
             int numPoints = 3 + random.nextInt(6);
             float theta = random.nextFloat() * 0.05f;
-            float outerRadius = (int)(Math.min(w, h) * 0.5);
-            float innerRadius = (int)(outerRadius * (0.1f + random.nextFloat() * 0.4));
+            float outerRadius = (int) (Math.min(w, h) * 0.5);
+            float innerRadius = (int) (outerRadius * (0.1f + random.nextFloat() * 0.4));
             return new MovingStar(numPoints, theta, innerRadius, outerRadius, x, y, w, h, fillColor, strokeColor, renderer);
         }
 
@@ -185,31 +185,31 @@ public class Flock1 extends PApplet {
         }
     }
 
-    private class HueColorizerFactory implements ColorizerFactory {
+    private static class HueColorizerFactory implements ColorizerFactory {
         public Colorizer build() {
             return new HueColorizer();
         }
     }
 
-    private class BrightnessColorizerFactory implements ColorizerFactory {
+    private static class BrightnessColorizerFactory implements ColorizerFactory {
         public Colorizer build() {
             return new BrightnessColorizer();
         }
     }
 
-    private class SaturationColorizerFactory implements ColorizerFactory {
+    private static class SaturationColorizerFactory implements ColorizerFactory {
         public Colorizer build() {
             return new SaturationColorizer();
         }
     }
 
-    private class RandomColorizerFactory implements ColorizerFactory {
+    private static class RandomColorizerFactory implements ColorizerFactory {
         public Colorizer build() {
             return new RandomColorizer();
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         PApplet.main(NAME);
     }
 
@@ -240,6 +240,13 @@ public class Flock1 extends PApplet {
         if (flocks.size() < minFlockCount) {
             Flock flock = newFlock();
             flocks.add(flock);
+        }
+    }
+
+    @Override
+    public void keyPressed() {
+        if (key == 's' || key == 'S') {
+            save(NAME + "." + System.currentTimeMillis() + ".png");
         }
     }
 

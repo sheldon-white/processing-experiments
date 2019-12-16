@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PVector;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,17 +13,17 @@ import java.util.Random;
 /**
  * Multiple Particle Systems
  * by Daniel Shiffman.
- *
+ * <p>
  * Click the mouse to generate a burst of particles
  * at mouse position.
- *
+ * <p>
  * Each burst is one instance of a particle system
  * with Particles and CrazyParticles (a subclass of Particle)
  * Note use of Inheritance and Polymorphism here.
  */
 
 public class Particles1 extends PApplet {
-    private static final String NAME = "Particles1";
+    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private ArrayList<ParticleSystem> systems;
     static Random random = new Random();
     private static Map<Integer, PFont> loadedFonts;
@@ -49,7 +50,7 @@ public class Particles1 extends PApplet {
         if (systems.isEmpty()) {
             fill(255);
             textAlign(CENTER);
-            text("click mouse to add particle systems", width/2f, height/2f);
+            text("click mouse to add particle systems", width / 2f, height / 2f);
         }
     }
 
@@ -61,7 +62,7 @@ public class Particles1 extends PApplet {
         String[] fontNames = PFont.list();
         loadedFonts = new HashMap<>();
         int idx = 0;
-        for (String fontName: fontNames) {
+        for (String fontName : fontNames) {
             for (int fontSize = 10; fontSize < 30; fontSize++) {
                 loadedFonts.put(idx, createFont(fontName, fontSize));
                 idx++;
@@ -84,7 +85,7 @@ public class Particles1 extends PApplet {
 
         void run() {
             // Cycle through the ArrayList backwards, because we are deleting while iterating
-            for (int i = particles.size()-1; i >= 0; i--) {
+            for (int i = particles.size() - 1; i >= 0; i--) {
                 Particle p = particles.get(i);
                 p.run();
                 if (p.isDead()) {
@@ -99,7 +100,7 @@ public class Particles1 extends PApplet {
             int color = color(56 + random.nextInt(200), 56 + random.nextInt(200), 56 + random.nextInt(200));
             int minChar = 0x4E00;
             int maxChar = 0x9faf;
-            char c = (char)(minChar + random.nextInt(maxChar - minChar));
+            char c = (char) (minChar + random.nextInt(maxChar - minChar));
             //char c = (char)(33 + random.nextInt(94));
             Particle p = new CrazyParticle(origin, c, font, color);
             particles.add(p);
@@ -115,7 +116,7 @@ public class Particles1 extends PApplet {
 //        }
     }
 
-// A simple Particle class
+    // A simple Particle class
     class Particle {
         PVector position;
         PVector velocity;

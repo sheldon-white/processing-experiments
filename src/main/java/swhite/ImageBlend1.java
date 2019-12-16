@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class ImageBlend1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 2;
+    private int cellSize = 1;
     private int outputWidth = 1500, outputHeight = 1000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
@@ -22,9 +22,11 @@ public class ImageBlend1 extends PApplet {
 
     @Override
     public void settings() {
-        img1 = loadImage("image1.jpg");
-        img2 = loadImage("image2.jpg");
-        size(outputWidth, outputHeight);
+        img1 = loadImage("flower.jpg");
+        img2 = loadImage("flower-tesselated.jpg");
+        size(img1.width, img1.height);
+        outputWidth = img1.width;
+        outputHeight = img1.height;
         pixelDensity(1);
         smooth(8);
     }
@@ -62,8 +64,8 @@ public class ImageBlend1 extends PApplet {
     private boolean overThreshold(int x) {
         double s1 = 10.0;
         double s2 = 4.0;
-        double x0 = s1 * (-0.5 + (double)x / xcount);
-        print(x, x0, "\n");
+        double x0 = s1 * (-0.5 + (double) x / xcount);
+        // print(x, x0, "\n");
         return x0 > (-0.5 + r.nextDouble()) * s2;
     }
 }

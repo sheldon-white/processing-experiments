@@ -10,7 +10,7 @@ public class Tesselation1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int cellSize = 100;
     private int halfCellSize = cellSize / 2;
-    private int outputWidth = 2200, outputHeight = 2900;
+    private int outputWidth, outputHeight;
 
     private PImage img;
     private Random r = new Random();
@@ -23,8 +23,10 @@ public class Tesselation1 extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("monalisa.jpg");
-        size(outputWidth, outputHeight);
+        img = loadImage("flower.jpg");
+        size(img.width, img.height);
+        outputWidth = img.width;
+        outputHeight = img.height;
         pixelDensity(1);
         smooth(8);
     }
@@ -33,8 +35,8 @@ public class Tesselation1 extends PApplet {
     public void draw() {
         context = this;
         background(0);
-        srcScaleX = (float) img.width / outputWidth;
-        srcScaleY = (float) img.height / outputHeight;
+        srcScaleX = 1;
+        srcScaleY = 1;
 
         background(0);
         //noStroke();
@@ -60,7 +62,7 @@ public class Tesselation1 extends PApplet {
 
         switch (r.nextInt(8)) {
             case 0:
-                fill(img.get((int)srcScaleX * (x + halfCellSize), (int)srcScaleY * (y + halfCellSize)));
+                fill(img.get((int) srcScaleX * (x + halfCellSize), (int) srcScaleY * (y + halfCellSize)));
                 rect(x, y, cellSize, cellSize);
                 break;
             case 1:
@@ -103,7 +105,7 @@ public class Tesselation1 extends PApplet {
     private void drawTriangle(IPoint p0, IPoint p1, IPoint p2) {
         Triangle t = new Triangle(p0, p1, p2);
         IPoint tc = t.centroidCenter();
-        int c = img.get((int)(srcScaleX * tc.x), (int)(srcScaleY * tc.y));
+        int c = img.get((int) (srcScaleX * tc.x), (int) (srcScaleY * tc.y));
         fill(c);
         drawTriangle(t);
     }

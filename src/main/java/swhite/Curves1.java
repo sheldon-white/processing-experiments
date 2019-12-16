@@ -49,18 +49,18 @@ public class Curves1 extends PApplet {
         beginShape();
         for (int i = 0; i < pointCount; i++) {
             double angle = i * TWO_PI / pointCount + (0.5 * r.nextDouble());
-            float px = x + (float)(Math.cos(angle) * radius * (r.nextDouble() + 0.5));
-            float py = y + (float)(Math.sin(angle) * radius * (r.nextDouble() + 0.5));
+            float px = x + (float) (Math.cos(angle) * radius * (r.nextDouble() + 0.5));
+            float py = y + (float) (Math.sin(angle) * radius * (r.nextDouble() + 0.5));
             //print("angle: ", angle, " x: ", x, " y: ", y, " px: ", px, " py: ", py, "\n");
             strokeWeight(4);
-            points.add(new IPoint((int)px, (int)py));
+            points.add(new IPoint((int) px, (int) py));
             //point(px, py);
         }
         curveVertex(points.get(0).x, points.get(0).y);
         curveVertex(points.get(1).x, points.get(1).y);
         curveVertex(points.get(2).x, points.get(2).y);
         strokeWeight(1);
-        fill(r.nextInt(255),r.nextInt(255),r.nextInt(255), 40 + r.nextInt(50));
+        fill(r.nextInt(255), r.nextInt(255), r.nextInt(255), 40 + r.nextInt(50));
         endShape();
         //ellipse(x, y, 2 * radius, 2 * radius);
     }

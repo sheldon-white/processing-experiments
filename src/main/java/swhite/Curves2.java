@@ -9,14 +9,15 @@ import java.util.Random;
 
 public class Curves2 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int outputWidth = 1500, outputHeight = 1000;
-    private int cellSize = 80;
+    private int cellSize = 100;
+    private int outputWidth = 3000;
+    private int outputHeight = 2000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
     private Random r = new Random();
     private static PApplet context;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         PApplet.main(NAME);
     }
 
@@ -34,12 +35,12 @@ public class Curves2 extends PApplet {
         //noStroke();
         stroke(0);
         strokeWeight(3);
-        List<IPoint> curve = randomCurve((int)(cellSize * 0.45));
+        List<IPoint> curve = randomCurve((int) (cellSize * 0.45));
         List<Float> deltas = new ArrayList<>();
-        for (IPoint p: curve) {
+        for (IPoint p : curve) {
             deltas.add((r.nextFloat() - 0.5F) * 4);
         }
-        int color = color(128 + r.nextInt(128), 128 + r.nextInt(128),128 + r.nextInt(128));
+        int color = color(128 + r.nextInt(128), 128 + r.nextInt(128), 128 + r.nextInt(128));
         int dr = r.nextInt(10) - 5;
         int dg = r.nextInt(10) - 5;
         int db = r.nextInt(10) - 5;
@@ -49,11 +50,11 @@ public class Curves2 extends PApplet {
             }
         }
         print("Done!\n");
-        save(NAME + ".png");
+        save(NAME + "." + System.currentTimeMillis() + ".png");
         noLoop();
     }
 
-    private void placeCurve(int x, int y, List<IPoint>curve, List<Float> deltas, int color, int dr, int dg, int db) {
+    private void placeCurve(int x, int y, List<IPoint> curve, List<Float> deltas, int color, int dr, int dg, int db) {
         int xs = x * cellSize + cellSize / 2;
         int ys = y * cellSize + cellSize / 2;
         float r = red(color) + x * dr;
@@ -81,10 +82,10 @@ public class Curves2 extends PApplet {
         beginShape();
         for (int i = 0; i < pointCount; i++) {
             double angle = i * TWO_PI / pointCount + (0.5 * r.nextDouble());
-            float px = x + (float)(Math.cos(angle) * radius * (r.nextDouble() + 0.3));
-            float py = y + (float)(Math.sin(angle) * radius * (r.nextDouble() + 0.3));
+            float px = x + (float) (Math.cos(angle) * radius * (r.nextDouble() + 0.3));
+            float py = y + (float) (Math.sin(angle) * radius * (r.nextDouble() + 0.3));
             //print("angle: ", angle, " x: ", x, " y: ", y, " px: ", px, " py: ", py, "\n");
-            points.add(new IPoint((int)px, (int)py));
+            points.add(new IPoint((int) px, (int) py));
         }
         return points;
     }

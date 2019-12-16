@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Distribution1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 50;
+    private int cellSize = 40;
     private int outputWidth = 3000, outputHeight = 2000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
@@ -63,7 +63,7 @@ public class Distribution1 extends PApplet {
         }
         if (ctr == 2) {
             noStroke();
-            fill(r.nextInt(255),r.nextInt(255),r.nextInt(255), 40 + r.nextInt(50));
+            fill(r.nextInt(255), r.nextInt(255), r.nextInt(255), 40 + r.nextInt(50));
             float radius = cellSize * (1 + 2 * r.nextFloat());
             ellipse(x * cellSize + cellSize / 2f, y * cellSize + cellSize / 2f, radius, radius);
         }
@@ -79,8 +79,8 @@ public class Distribution1 extends PApplet {
     }
 
     private boolean randomChoice(int i, int min, int max) {
-        double scaled = (double)(i - max / 2) / (max - min);
-        double a = 20;
+        double scaled = (double) (i - max / 2) / (max - min);
+        double a = 10;
         double b = 0.6;
         double c = b * Math.exp(-scaled * scaled * a);
         return c > r.nextDouble();

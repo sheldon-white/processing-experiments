@@ -24,8 +24,8 @@ public class RandomText1 extends PApplet {
 
     @Override
     public void settings() {
-        int outputWidth = 1600;
-        int outputHeight = 900;
+        int outputWidth = 3000;
+        int outputHeight = 2000;
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
@@ -39,11 +39,21 @@ public class RandomText1 extends PApplet {
     @Override
     public void draw() {
         background(100, 255);
-        int maxWords = 400;
-        if (displayedWords.size() < maxWords) {
-            displayedWords.add(newWord());
+        int maxWords = 800;
+        int ctr = 60;
+        while (--ctr > 0) {
+            if (displayedWords.size() < maxWords) {
+                displayedWords.add(newWord());
+            }
         }
         displayedWords = displayedWords.stream().filter(w -> w.alpha >= 0).map(DisplayedWord::draw).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void keyPressed() {
+        if (key == 's' || key == 'S') {
+            save(NAME + "." + System.currentTimeMillis() + ".png");
+        }
     }
 
     private DisplayedWord newWord() {
@@ -56,7 +66,7 @@ public class RandomText1 extends PApplet {
         displayedWord.color = color(56 + random.nextInt(200), 56 + random.nextInt(200), 56 + random.nextInt(200));
         displayedWord.theta = 2 * PI * random.nextFloat();
         displayedWord.alpha = 255;
-        displayedWord.dAlpha = 1 + random.nextInt(10);
+        displayedWord.dAlpha = 1 + (2 * random.nextFloat());
         return displayedWord;
     }
 
@@ -81,7 +91,7 @@ public class RandomText1 extends PApplet {
         int y;
         float theta;
         int alpha;
-        int dAlpha;
+        float dAlpha;
 
         DisplayedWord draw() {
             pushMatrix();

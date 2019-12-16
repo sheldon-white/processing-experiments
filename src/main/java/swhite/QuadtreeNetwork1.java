@@ -8,10 +8,10 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Random;
 
-public class QuadtreeTest3 extends PApplet {
+public class QuadtreeNetwork1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
     private int cellSize = 40;
-    private int cellMargin = (int)(cellSize / 8);
+    private int cellMargin = (int) (cellSize / 8);
 
     private int outputWidth = 3000;
     private int outputHeight = 2000;
@@ -20,6 +20,7 @@ public class QuadtreeTest3 extends PApplet {
 
     private Random r = new Random();
     private static final boolean SPARCE = false;
+
     public static void main(String args[]) {
         PApplet.main(NAME);
     }
@@ -87,11 +88,11 @@ public class QuadtreeTest3 extends PApplet {
     }
 
     private void drawQuad(QuadRectangle q) {
-        float x = (float)q.x * cellSize + cellMargin;
-        float y = (float)q.y * cellSize + cellMargin;
-        float w = (float)q.width * cellSize - 2 * cellMargin;
-        float h = (float)q.height * cellSize - 2 * cellMargin;
-        int color = color(128 + r.nextInt(128), 128 + r.nextInt(128),128 + r.nextInt(128));
+        float x = (float) q.x * cellSize + cellMargin;
+        float y = (float) q.y * cellSize + cellMargin;
+        float w = (float) q.width * cellSize - 2 * cellMargin;
+        float h = (float) q.height * cellSize - 2 * cellMargin;
+        int color = color(128 + r.nextInt(128), 128 + r.nextInt(128), 128 + r.nextInt(128));
 
         stroke(80);
         strokeWeight(2);
@@ -106,7 +107,7 @@ public class QuadtreeTest3 extends PApplet {
     private void drawHorizontals(StandardQuadTree<QuadRectangle> quadTree, QuadRectangle q) {
         QuadRectangle target = new QuadRectangle(q.x - 1, q.y, 1, q.height);
         List<QuadRectangle> hits = quadTree.getElements(target);
-        for (QuadRectangle c: hits) {
+        for (QuadRectangle c : hits) {
             if (c.x + c.width == q.x) {
                 if (SPARCE && c.width == 1 && c.height == 1) {
                     continue;
@@ -121,7 +122,7 @@ public class QuadtreeTest3 extends PApplet {
     private void drawVerticals(StandardQuadTree<QuadRectangle> quadTree, QuadRectangle q) {
         QuadRectangle target = new QuadRectangle(q.x, q.y - 1, q.width, 1);
         List<QuadRectangle> hits = quadTree.getElements(target);
-        for (QuadRectangle c: hits) {
+        for (QuadRectangle c : hits) {
             if (c.y + c.height == q.y) {
                 if (SPARCE && c.width == 1 && c.height == 1) {
                     continue;

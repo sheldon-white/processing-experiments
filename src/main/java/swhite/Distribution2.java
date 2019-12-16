@@ -7,15 +7,15 @@ import java.util.Random;
 
 public class Distribution2 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 60;
+    private int cellSize = 50;
     private int outputWidth = 3000, outputHeight = 2000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
-    private int LINE_LENGTH = (int)(cellSize / 3);
+    private int LINE_LENGTH = (int) (cellSize / 3);
 
     private int xh0 = LINE_LENGTH;
-    private int xh1 = (int)(LINE_LENGTH * cos(PI / 3));
-    private int yh1 = (int)(LINE_LENGTH * sin(PI / 3));
+    private int xh1 = (int) (LINE_LENGTH * cos(PI / 3));
+    private int yh1 = (int) (LINE_LENGTH * sin(PI / 3));
 
     private Random r = new Random();
 
@@ -82,7 +82,7 @@ public class Distribution2 extends PApplet {
 
         if (ctr == 3) {
             noStroke();
-            fill(r.nextInt(255),r.nextInt(255),r.nextInt(255), 40 + r.nextInt(50));
+            fill(r.nextInt(255), r.nextInt(255), r.nextInt(255), 40 + r.nextInt(50));
             float radius = cellSize * (1 + 2 * r.nextFloat());
             ellipse(xs, ys, radius, radius);
         }
@@ -99,7 +99,7 @@ public class Distribution2 extends PApplet {
     }
 
     private boolean randomChoice(int i, int min, int max) {
-        double scaled = (double)(i - max / 2) / (max - min);
+        double scaled = (double) (i - max / 2) / (max - min);
         double a = 10;
         double b = 0.7;
         double c = b * Math.exp(-scaled * scaled * a);
