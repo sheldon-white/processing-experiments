@@ -1,18 +1,18 @@
 package swhite;
 
-import com.google.common.collect.Lists;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 import processing.core.PApplet;
+import processing.core.PFont;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class QuadtreeCurves1 extends PApplet {
+public class QuadtreeKanji1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 60;
+    private int cellSize = 50;
+    private int cellMargin = cellSize / 8;
 
     private int outputWidth = 3000;
     private int outputHeight = 2000;
@@ -21,8 +21,9 @@ public class QuadtreeCurves1 extends PApplet {
 
     private Random r = new Random();
     private static final boolean SPARCE = false;
+    private FontLoader fontLoader = new FontLoader();
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         PApplet.main(NAME);
     }
 
@@ -86,16 +87,39 @@ public class QuadtreeCurves1 extends PApplet {
     }
 
     private void drawQuad(QuadRectangle q) {
-        float x = (float) q.x * cellSize;
-        float y = (float) q.y * cellSize;
-        float w = (float) q.width * cellSize;
-        float h = (float) q.height * cellSize;
+        float x = (float) q.x * cellSize + cellMargin;
+        float y = (float) q.y * cellSize + cellMargin;
+        float w = (float) q.width * cellSize - 2 * cellMargin;
+        float h = (float) q.height * cellSize - 2 * cellMargin;
         fillWithRandomColor();
         stroke(80);
-        strokeWeight(1);
+        strokeWeight(2);
         rect(x, y, w, h);
         fillWithRandomColor();
-        randomCurve(x, y, w, h);
+        drawRandomCharacter(x, y, w, h);
+    }
+
+    private void drawRandomCharacter(float x, float y, float w, float h) {
+        // Common and uncommon kanji ( 4e00 - 9faf)
+        int minChar = 0x4E00;
+        int maxChar = 0x9faf;
+        int min = floor(min(w, h) * 0.75f);
+        boolean done = false;
+        while (!done) {
+            PFont font = fontLoader.getRandomFont(this, min);
+            char c = (char) (minChar + r.nextInt(maxChar - minChar));
+            PFont.Glyph glyph = font.getGlyph(c);
+            if (glyph != null) {
+                pushMatrix();
+                translate(x + (glyph.leftExtent + w - glyph.width) / 2,
+//                        y - glyph.topExtent / 2 + h - glyph.height / 2);
+                        y + glyph.topExtent + (h - glyph.height) / 2);
+                textFont(font);
+                text(c, 0, 0);
+                popMatrix();
+                done = true;
+            }
+        }
     }
 
     private void fillWithRandomColor() {
@@ -106,32 +130,6 @@ public class QuadtreeCurves1 extends PApplet {
         int blue = baseIntensity + r.nextInt(variance);
         int alpha = 255;
         fill(red, green, blue, alpha);
-    }
-
-    private void randomCurve(float x, float y, float w, float h) {
-        int pointCount = 4 + r.nextInt(3);
-        float b = 0.2f * min(w, h);
-        float xi = x + b;
-        float yi = y + b;
-        float wi = w - 2 * b;
-        float hi = h - 2 * b;
-        float xstep = wi / 6;
-        float ystep = hi / 6;
-
-        List<FPoint> gridPoints = Lists.newArrayList();
-        for (float xctr = 0, xcur = xi; xctr < 7; xctr++) {
-            for (float yctr = 0, ycur = yi; yctr < 7; yctr++) {
-                FPoint p = new FPoint(xcur, ycur);
-                gridPoints.add(p);
-                ycur += ystep;
-            }
-            xcur += xstep;
-        }
-        Collections.shuffle(gridPoints);
-        beginShape();
-        gridPoints.subList(0, pointCount).forEach(p -> curveVertex(p.x, p.y));
-        gridPoints.subList(0, 3).forEach(p -> curveVertex(p.x, p.y));
-        endShape(CLOSE);
     }
 }
 

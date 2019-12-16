@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class RandomCurves1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
-    private int cellSize = 100;
+    private int cellSize = 150;
     private int outputWidth = 3000, outputHeight = 2000;
 
     private Random r = new Random();
