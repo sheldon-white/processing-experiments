@@ -27,7 +27,6 @@ public class Arrows1 extends PApplet {
     @Override
     public void draw() {
         background(0);
-        //noStroke();
         stroke(128);
         strokeWeight(1);
 

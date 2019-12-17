@@ -1,30 +1,28 @@
 package swhite;
 
-import com.google.common.collect.Lists;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Collections;
 import java.util.List;
 
-public class QuadtreeBezierCurves1 extends DesktopGenerator {
-    private int cellSize = 40;
-    private int cellMargin = (int) (cellSize / 8);
+public class QuadtreeArrows2 extends DesktopGenerator {
+    private int cellSize = 20;
 
-    private int outputWidth = 3000;
-    private int outputHeight = 2000;
+    private int outputWidth = 3500;
+    private int outputHeight = 2500;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
+
     private static final boolean SPARCE = false;
 
     public static void main(String[] args) {
-        DesktopGenerator generator = new QuadtreeBezierCurves1();
+        DesktopGenerator generator = new QuadtreeArrows2();
         generator.cacheArgs(args);
         generator.run();
     }
 
-    public QuadtreeBezierCurves1() {
+    public QuadtreeArrows2() {
         super(MethodHandles.lookup().lookupClass().getName());
     }
 
@@ -38,8 +36,6 @@ public class QuadtreeBezierCurves1 extends DesktopGenerator {
     @Override
     public void drawDesktop() {
         background(220);
-        stroke(0);
-        strokeWeight(1.5F);
 
         QuadRectangle bounds = new QuadRectangle(0, 0, xcount, ycount);
         StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
@@ -47,8 +43,8 @@ public class QuadtreeBezierCurves1 extends DesktopGenerator {
         while (emptyCells > 0) {
             int x = r.nextInt(xcount);
             int y = r.nextInt(ycount);
-            int w = 1 + r.nextInt(8);
-            int h = 1 + r.nextInt(8);
+            int w = 1 + r.nextInt(20);
+            int h = w;
             if (x + w > xcount) {
                 continue;
             }
@@ -80,37 +76,51 @@ public class QuadtreeBezierCurves1 extends DesktopGenerator {
     }
 
     private void drawQuad(QuadRectangle q) {
-        float x = (float) q.x * cellSize + cellMargin;
-        float y = (float) q.y * cellSize + cellMargin;
-        float w = (float) q.width * cellSize - 2 * cellMargin;
-        float h = (float) q.height * cellSize - 2 * cellMargin;
-        int color = color(128 + r.nextInt(128), 128 + r.nextInt(128), 128 + r.nextInt(128));
+        float x = (float) q.x * cellSize;
+        float y = (float) q.y * cellSize;
+        float w = (float) q.width * cellSize;
+        float h = (float) q.height * cellSize;
+        float xcen = x + w / 2;
+        float ycen = y + h / 2;
 
-        stroke(80);
-        strokeWeight(2);
-        fill(color);
+        fillWithRandomColor();
         rect(x, y, w, h);
-        randomCurve(x, y, w, h);
+        fillWithRandomColor();
+        ellipse(xcen, ycen, w, h);
+        fillWithRandomColor();
+        drawArrow(xcen, ycen, w, h, 2 * PI * r.nextFloat());
     }
 
-    private void randomCurve(float x, float y, float w, float h) {
-        int pointCount = 4 + r.nextInt(4);
-        float b = 0.1f * min(w, h);
-        List<FPoint> gridPoints = Lists.newArrayList();
-        float xstep = w - 2 * b / 6;
-        float ystep = h - 2 * b / 6;
-        for (int xctr = 0; xctr < 7; xctr++) {
-            for (int yctr = 0; yctr < 7; yctr++) {
-                FPoint p = new FPoint(x + (xctr * xstep), y + (yctr * ystep));
-                System.out.println(p.x + "," + p.y);
-                gridPoints.add(p);
-            }
-        }
-        Collections.shuffle(gridPoints);
-        beginShape();
-        gridPoints.subList(0, pointCount).forEach(p -> curveVertex(p.x, p.y));
-        gridPoints.subList(0, 2).forEach(p -> curveVertex(p.x, p.y));
-        endShape();
+    private void drawArrow(float xc, float yc, float w, float h, float theta) {
+        pushMatrix();
+        translate(xc, yc);
+        rotate(theta);
+        noStroke();
+        fillWithRandomColor();
+        float b = h / 8;
+        float wi = w - 2 * b;
+        float hi = h - 2 * b;
+        float y0 = -hi / 2;
+        float y2 = 0;
+        float y3 = hi / 2;
+        float x0 = -wi / 2;
+        float x1 = wi / 2 - (hi / 2);
+        float x2 = wi / 2;
+        x1 = min(x1, x2);
+        x2 = max(x1, x2);
+        triangle(x1, y0, x2, y2, x1, y3);
+        rect(x0, -hi / 4, x1 - x0 + 1, hi / 2);
+        popMatrix();
+    }
+
+    private void fillWithRandomColor() {
+        int baseIntensity = 100;
+        int variance = 155;
+        int red = baseIntensity + r.nextInt(variance);
+        int green = baseIntensity + r.nextInt(variance);
+        int blue = baseIntensity + r.nextInt(variance);
+        int alpha = 255;
+        fill(red, green, blue, alpha);
     }
 }
 

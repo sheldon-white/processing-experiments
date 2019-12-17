@@ -1,45 +1,40 @@
 package swhite;
 
-import processing.core.PApplet;
-
 import java.lang.invoke.MethodHandles;
-import java.util.Random;
 
-public class Distribution1 extends PApplet {
-    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
+public class Distribution1 extends DesktopGenerator {
     private int cellSize = 40;
     private int outputWidth = 3000, outputHeight = 2000;
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
-    private Random r = new Random();
 
-    public static void main(String args[]) {
-        PApplet.main(NAME);
+    public static void main(String[] args) {
+        DesktopGenerator generator = new Distribution1();
+        generator.cacheArgs(args);
+        generator.run();
+    }
+
+    public Distribution1() {
+        super(MethodHandles.lookup().lookupClass().getName());
     }
 
     @Override
-    public void settings() {
+    public void initializeSettings() {
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
 
     @Override
-    public void draw() {
+    public void drawDesktop() {
         background(180);
-        //noStroke();
-        stroke(0);
-        strokeWeight(1);
 
         for (int y = 0; y < ycount; y++) {
             for (int x = 0; x < xcount; x++) {
                 drawCell(x, y);
             }
         }
-
-        save(NAME + "." + System.currentTimeMillis() + ".png");
-        print("Done!\n");
-        noLoop();
+        doneDrawing = true;
     }
 
     private void drawCell(int x, int y) {

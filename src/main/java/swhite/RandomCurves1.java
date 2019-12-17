@@ -1,33 +1,34 @@
 package swhite;
 
 import com.google.common.collect.Lists;
-import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-public class RandomCurves1 extends PApplet {
-    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
+public class RandomCurves1 extends DesktopGenerator {
     private int cellSize = 150;
     private int outputWidth = 3000, outputHeight = 2000;
 
-    private Random r = new Random();
+    public static void main(String[] args) {
+        DesktopGenerator generator = new RandomCurves1();
+        generator.cacheArgs(args);
+        generator.run();
+    }
 
-    public static void main(String args[]) {
-        PApplet.main(NAME);
+    public RandomCurves1() {
+        super(MethodHandles.lookup().lookupClass().getName());
     }
 
     @Override
-    public void settings() {
+    public void initializeSettings() {
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
 
     @Override
-    public void draw() {
+    public void drawDesktop() {
         background(0);
         noStroke();
         stroke(128);
@@ -38,9 +39,7 @@ public class RandomCurves1 extends PApplet {
                 drawCell(x, y);
             }
         }
-        save(NAME + "." + System.currentTimeMillis() + ".png");
-        print("Done!\n");
-        noLoop();
+        doneDrawing = true;
     }
 
     private void drawCell(int x, int y) {

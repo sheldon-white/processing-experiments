@@ -1,37 +1,32 @@
 package swhite;
 
-import processing.core.PApplet;
-
 import java.lang.invoke.MethodHandles;
-import java.util.Random;
 
-public class Tesselation2 extends PApplet {
-    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
+public class Tesselation2 extends DesktopGenerator {
     private int cellSize = 100;
     private int halfCellSize = cellSize / 2;
     private int outputWidth = 2200, outputHeight = 2900;
 
-    private Random r = new Random();
-    private static PApplet context;
+    public static void main(String[] args) {
+        DesktopGenerator generator = new Tesselation2();
+        generator.cacheArgs(args);
+        generator.run();
+    }
 
-    public static void main(String args[]) {
-        PApplet.main(NAME);
+    public Tesselation2() {
+        super(MethodHandles.lookup().lookupClass().getName());
     }
 
     @Override
-    public void settings() {
+    public void initializeSettings() {
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
 
     @Override
-    public void draw() {
-        context = this;
+    public void drawDesktop() {
         background(0);
-
-        background(0);
-        //noStroke();
         stroke(128);
         strokeWeight(1);
 
@@ -40,9 +35,7 @@ public class Tesselation2 extends PApplet {
                 tesselateSquare(x, y);
             }
         }
-        save(NAME + "." + System.currentTimeMillis() + ".png");
-        print("Done!\n");
-        noLoop();
+        doneDrawing = true;
     }
 
     private void tesselateSquare(int x, int y) {

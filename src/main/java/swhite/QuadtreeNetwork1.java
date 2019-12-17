@@ -2,14 +2,11 @@ package swhite;
 
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
-import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.Random;
 
-public class QuadtreeNetwork1 extends PApplet {
-    private static final String NAME = MethodHandles.lookup().lookupClass().getName();
+public class QuadtreeNetwork1 extends DesktopGenerator {
     private int cellSize = 40;
     private int cellMargin = (int) (cellSize / 8);
 
@@ -18,22 +15,27 @@ public class QuadtreeNetwork1 extends PApplet {
     private int xcount = outputWidth / cellSize;
     private int ycount = outputHeight / cellSize;
 
-    private Random r = new Random();
     private static final boolean SPARCE = false;
 
-    public static void main(String args[]) {
-        PApplet.main(NAME);
+    public static void main(String[] args) {
+        DesktopGenerator generator = new QuadtreeNetwork1();
+        generator.cacheArgs(args);
+        generator.run();
+    }
+
+    public QuadtreeNetwork1() {
+        super(MethodHandles.lookup().lookupClass().getName());
     }
 
     @Override
-    public void settings() {
+    public void initializeSettings() {
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);
     }
 
     @Override
-    public void draw() {
+    public void drawDesktop() {
         background(220);
 
         //noStroke();
@@ -81,10 +83,7 @@ public class QuadtreeNetwork1 extends PApplet {
                 drawVerticals(quadTree, q);
             }
         }
-
-        save(NAME + "." + System.currentTimeMillis() + ".png");
-        print("Done!\n");
-        noLoop();
+        doneDrawing = true;
     }
 
     private void drawQuad(QuadRectangle q) {
