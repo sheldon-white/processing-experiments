@@ -11,7 +11,7 @@ public abstract class DesktopGenerator extends PApplet {
     protected Random r = new Random();
     private String className;
     protected boolean doneDrawing = false;
-
+    protected static PApplet context;
     private static String[] globalArgs;
 
     @Option(name = "-b", usage = "run in batch mode")
@@ -49,6 +49,7 @@ public abstract class DesktopGenerator extends PApplet {
 
     @Override
     public void draw() {
+        context = this;
         drawDesktop();
         if (doneDrawing) {
             saveDesktop();

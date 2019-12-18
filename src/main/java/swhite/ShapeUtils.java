@@ -1,10 +1,53 @@
 package swhite;
 
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
+import processing.core.PApplet;
+import processing.core.PFont;
 
 import java.util.Random;
 
 public class ShapeUtils {
+
+    static boolean centerCharacterInRect(PApplet context,
+                                         PFont font,
+                                         char c,
+                                         float x,
+                                         float y,
+                                         float w,
+                                         float h) {
+        PFont.Glyph glyph = font.getGlyph(c);
+        if (glyph != null) {
+            context.pushMatrix();
+            context.translate(x + (glyph.leftExtent + w - glyph.width) / 2,
+                    y + glyph.topExtent + (h - glyph.height) / 2);
+            context.textFont(font);
+            context.text(c, 0, 0);
+            context.popMatrix();
+            return true;
+        }
+        return false;
+    }
+
+    static void drawArrow(PApplet context, float xc, float yc, float w, float h, float theta) {
+        context.pushMatrix();
+        context.translate(xc, yc);
+        context.rotate(theta);
+        float b = h / 8;
+        float wi = w - 2 * b;
+        float hi = h - 2 * b;
+        float y0 = -hi / 2;
+        float y2 = 0;
+        float y3 = hi / 2;
+        float x0 = -wi / 2;
+        float x1 = wi / 2 - (hi / 2);
+        float x2 = wi / 2;
+        x1 = context.min(x1, x2);
+        x2 = context.max(x1, x2);
+        context.triangle(x1, y0, x2, y2, x1, y3);
+        context.rect(x0, -hi / 4, x1 - x0 + 1, hi / 2);
+        context.popMatrix();
+    }
+
     public static Triangle randomTriangle(int x, int y, int width, int height) {
         Random r = new Random();
         IPoint p0 = new IPoint(x + r.nextInt(width), y + r.nextInt(height));

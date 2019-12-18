@@ -2,13 +2,12 @@ package swhite;
 
 import com.google.common.collect.Lists;
 import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
-import org.datasyslab.geospark.spatialPartitioning.quadtree.StandardQuadTree;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
 
-public class QuadtreeCurves1 extends DesktopGenerator {
+public class QuadtreeCurves1 extends QuadtreeDesktopGenerator {
     private int cellSize = 60;
 
     private int outputWidth = 3000;
@@ -36,75 +35,17 @@ public class QuadtreeCurves1 extends DesktopGenerator {
     }
 
     @Override
-    public void drawDesktop() {
-        background(220);
-        stroke(0);
-        strokeWeight(1.5F);
-
-        QuadRectangle bounds = new QuadRectangle(0, 0, xcount, ycount);
-        StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, xcount, ycount), 0, 1, 4);
-        int emptyCells = xcount * ycount;
-        while (emptyCells > 0) {
-            int x = r.nextInt(xcount);
-            int y = r.nextInt(ycount);
-            int w = 1 + r.nextInt(8);
-            int h = 1 + r.nextInt(8);
-            if (w / h > 3) {
-                w = h * 3;
-            } else if (h / w > 3) {
-                h = w * 3;
-            }
-            if (x + w > xcount) {
-                continue;
-            }
-            if (y + h > ycount) {
-                continue;
-            }
-            QuadRectangle q = new QuadRectangle(x, y, w, h);
-            List<QuadRectangle> hits = quadTree.getElements(q);
-            boolean fits = true;
-            for (QuadRectangle c : hits) {
-                if (q != c && ShapeUtils.rectanglesIntersect(q, c)) {
-                    fits = false;
-                    break;
-                }
-            }
-            if (fits) {
-                quadTree.insert(q, q);
-                emptyCells -= w * h;
-            }
-        }
-
-        for (QuadRectangle q : quadTree.getElements(bounds)) {
-            if (SPARCE && q.width == 1 && q.height == 1) {
-                continue;
-            }
-            drawQuad(q);
-        }
-        doneDrawing = true;
-    }
-
-    private void drawQuad(QuadRectangle q) {
+    protected void drawQuad(QuadRectangle q) {
         float x = (float) q.x * cellSize;
         float y = (float) q.y * cellSize;
         float w = (float) q.width * cellSize;
         float h = (float) q.height * cellSize;
-        fillWithRandomColor();
+        ColorUtils.fillWithRandomColor(context);
         stroke(80);
         strokeWeight(1);
         rect(x, y, w, h);
-        fillWithRandomColor();
+        ColorUtils.fillWithRandomColor(context);
         randomCurve(x, y, w, h);
-    }
-
-    private void fillWithRandomColor() {
-        int baseIntensity = 100;
-        int variance = 155;
-        int red = baseIntensity + r.nextInt(variance);
-        int green = baseIntensity + r.nextInt(variance);
-        int blue = baseIntensity + r.nextInt(variance);
-        int alpha = 255;
-        fill(red, green, blue, alpha);
     }
 
     private void randomCurve(float x, float y, float w, float h) {
@@ -131,6 +72,18 @@ public class QuadtreeCurves1 extends DesktopGenerator {
         gridPoints.subList(0, pointCount).forEach(p -> curveVertex(p.x, p.y));
         gridPoints.subList(0, 3).forEach(p -> curveVertex(p.x, p.y));
         endShape(CLOSE);
+    }
+
+    @Override
+    protected IPoint getRandomBounds(int maxWidth, int maxHeight) {
+        int w = 1 + r.nextInt(maxWidth);
+        int h = 1 + r.nextInt(maxHeight);
+        if (w / h > 3) {
+            w = h * 3;
+        } else if (h / w > 3) {
+            h = w * 3;
+        }
+        return new IPoint(w, h);
     }
 }
 
