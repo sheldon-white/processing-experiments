@@ -6,15 +6,13 @@ import processing.core.PFont;
 import java.lang.invoke.MethodHandles;
 
 public class QuadtreePunctuation1 extends QuadtreeDesktopGenerator {
-    private int cellSize = 50;
+    private static int cellSize = 50;
+    private static int quadTreeWidth = 80;
+    private static int quadTreeHeight = 60;
+    private static int maxQuadWidth = 8;
+    private static int maxQuadHeight = 8;
     private int cellMargin = cellSize / 8;
 
-    private int outputWidth = 3000;
-    private int outputHeight = 2000;
-    private int xcount = outputWidth / cellSize;
-    private int ycount = outputHeight / cellSize;
-
-    private static final boolean SPARCE = false;
     private FontLoader fontLoader = new FontLoader();
 
     public static void main(String[] args) {
@@ -24,14 +22,20 @@ public class QuadtreePunctuation1 extends QuadtreeDesktopGenerator {
     }
 
     public QuadtreePunctuation1() {
-        super(MethodHandles.lookup().lookupClass().getName());
+        super(MethodHandles.lookup().lookupClass().getName(),
+                maxQuadWidth, maxQuadHeight, quadTreeWidth, quadTreeHeight);
     }
 
     @Override
     public void initializeSettings() {
-        size(outputWidth, outputHeight);
+        size(cellSize * quadTreeWidth, cellSize * quadTreeHeight);
         pixelDensity(1);
         smooth(8);
+    }
+
+    @Override
+    protected void initFrame() {
+        background(220);
     }
 
     @Override

@@ -8,34 +8,35 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class QuadtreeDesktopGenerator extends DesktopGenerator {
-    private int cellSize = 50;
-    private int cellMargin = (int) (cellSize / 8);
-
-    private int outputWidth = 4000;
-    private int outputHeight = 3000;
-    private int quadTreeWidth = outputWidth / cellSize;
-    private int quadTreeHeight = outputHeight / cellSize;
+    private int maxQuadWidth;
+    private int maxQuadHeight;
+    private int quadTreeWidth;
+    private int quadTreeHeight;
 
     private static final boolean SPARCE = false;
 
-    public QuadtreeDesktopGenerator(String name) {
+    public QuadtreeDesktopGenerator(String name,
+                                    int maxQuadWidth,
+                                    int maxQuadHeight,
+                                    int quadTreeWidth,
+                                    int quadTreeHeight) {
         super(name);
+        this.quadTreeWidth = quadTreeWidth;
+        this.quadTreeHeight = quadTreeHeight;
+        this.maxQuadWidth = maxQuadWidth;
+        this.maxQuadHeight = maxQuadHeight;
     }
 
     @Override
     public final void drawDesktop() {
-        background(220);
-        stroke(0);
-        strokeWeight(1.5F);
-        int maxWidth = 4;
-        int maxHeight = 4;
-        Set<String> legalDimensions = getLegalDimensions(maxWidth, maxHeight);
+        initFrame();
+        Set<String> legalDimensions = getLegalDimensions(maxQuadWidth, maxQuadHeight);
 
         QuadRectangle bounds = new QuadRectangle(0, 0, quadTreeWidth, quadTreeHeight);
         StandardQuadTree<QuadRectangle> quadTree = new StandardQuadTree<>(new QuadRectangle(0, 0, quadTreeWidth, quadTreeHeight), 0, 1, 4);
         int emptyCells = quadTreeWidth * quadTreeHeight;
         while (emptyCells > 0) {
-            IPoint dim = getRandomBounds(maxWidth, maxHeight);
+            IPoint dim = getRandomBounds();
             int w = dim.x;
             int h = dim.y;
 
@@ -115,10 +116,12 @@ public abstract class QuadtreeDesktopGenerator extends DesktopGenerator {
         return legalDimensions;
     }
 
-    protected IPoint getRandomBounds(int maxWidth, int maxHeight) {
-        return new IPoint(1 + r.nextInt(maxWidth), 1 + r.nextInt(maxHeight));
+    protected IPoint getRandomBounds() {
+        return new IPoint(1 + r.nextInt(maxQuadWidth), 1 + r.nextInt(maxQuadHeight));
     }
 
     protected abstract void drawQuad(QuadRectangle q);
+
+    protected abstract void initFrame();
 }
 

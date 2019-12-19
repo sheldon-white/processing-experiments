@@ -8,14 +8,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class QuadtreeCurves1 extends QuadtreeDesktopGenerator {
-    private int cellSize = 60;
-
-    private int outputWidth = 3000;
-    private int outputHeight = 2000;
-    private int xcount = outputWidth / cellSize;
-    private int ycount = outputHeight / cellSize;
-
-    private static final boolean SPARCE = false;
+    private static int cellSize = 60;
+    private static int quadTreeWidth = 80;
+    private static int quadTreeHeight = 60;
+    private static int maxQuadWidth = 8;
+    private static int maxQuadHeight = 8;
 
     public static void main(String[] args) {
         DesktopGenerator generator = new QuadtreeCurves1();
@@ -24,14 +21,20 @@ public class QuadtreeCurves1 extends QuadtreeDesktopGenerator {
     }
 
     public QuadtreeCurves1() {
-        super(MethodHandles.lookup().lookupClass().getName());
+        super(MethodHandles.lookup().lookupClass().getName(),
+                maxQuadWidth, maxQuadHeight, quadTreeWidth, quadTreeHeight);
     }
 
     @Override
     public void initializeSettings() {
-        size(outputWidth, outputHeight);
+        size(cellSize * quadTreeWidth, cellSize * quadTreeHeight);
         pixelDensity(1);
         smooth(8);
+    }
+
+    @Override
+    protected void initFrame() {
+        background(220);
     }
 
     @Override
@@ -75,9 +78,9 @@ public class QuadtreeCurves1 extends QuadtreeDesktopGenerator {
     }
 
     @Override
-    protected IPoint getRandomBounds(int maxWidth, int maxHeight) {
-        int w = 1 + r.nextInt(maxWidth);
-        int h = 1 + r.nextInt(maxHeight);
+    protected IPoint getRandomBounds() {
+        int w = 1 + r.nextInt(maxQuadWidth);
+        int h = 1 + r.nextInt(maxQuadHeight);
         if (w / h > 3) {
             w = h * 3;
         } else if (h / w > 3) {

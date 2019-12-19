@@ -5,14 +5,11 @@ import org.datasyslab.geospark.spatialPartitioning.quadtree.QuadRectangle;
 import java.lang.invoke.MethodHandles;
 
 public class QuadtreeArrows2 extends QuadtreeDesktopGenerator {
-    private int cellSize = 20;
-
-    private int outputWidth = 3500;
-    private int outputHeight = 2500;
-    private int xcount = outputWidth / cellSize;
-    private int ycount = outputHeight / cellSize;
-
-    private static final boolean SPARCE = false;
+    private static int cellSize = 20;
+    private static int quadTreeWidth = 80;
+    private static int quadTreeHeight = 60;
+    private static int maxQuadWidth = 8;
+    private static int maxQuadHeight = 8;
 
     public static void main(String[] args) {
         DesktopGenerator generator = new QuadtreeArrows2();
@@ -21,14 +18,20 @@ public class QuadtreeArrows2 extends QuadtreeDesktopGenerator {
     }
 
     public QuadtreeArrows2() {
-        super(MethodHandles.lookup().lookupClass().getName());
+        super(MethodHandles.lookup().lookupClass().getName(),
+                maxQuadWidth, maxQuadHeight, 80, 60);
     }
 
     @Override
     public void initializeSettings() {
-        size(outputWidth, outputHeight);
+        size(cellSize * quadTreeWidth, cellSize * quadTreeHeight);
         pixelDensity(1);
         smooth(8);
+    }
+
+    @Override
+    protected void initFrame() {
+        background(220);
     }
 
     @Override
@@ -50,8 +53,8 @@ public class QuadtreeArrows2 extends QuadtreeDesktopGenerator {
     }
 
     @Override
-    protected IPoint getRandomBounds(int maxWidth, int maxHeight) {
-        int w = 1 + r.nextInt(20);
+    protected IPoint getRandomBounds() {
+        int w = 1 + r.nextInt(maxQuadWidth);
         return new IPoint(w, w);
     }
 }
