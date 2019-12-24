@@ -10,7 +10,7 @@ public class ImageDots1 extends PApplet {
     private static final String NAME = MethodHandles.lookup().lookupClass().getName();
 
     private Random r = new Random();
-    private static String imageName = "image4.jpg";
+    private static String imageName = "src/main/resources/image4.jpg";
     private PImage image;
 
     public static void main(String args[]) {

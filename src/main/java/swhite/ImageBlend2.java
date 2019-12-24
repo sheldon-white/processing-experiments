@@ -16,8 +16,8 @@ public class ImageBlend2 extends PApplet {
 
     @Override
     public void settings() {
-        img1 = loadImage("flower.jpg");
-        img2 = loadImage("flower-tesselated.jpg");
+        img1 = loadImage("src/main/resources/flower.jpg");
+        img2 = loadImage("src/main/resources/flower-tesselated.jpg");
         size(img1.width, img1.height);
         pixelDensity(1);
         smooth(8);

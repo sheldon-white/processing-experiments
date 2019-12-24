@@ -18,7 +18,7 @@ public class ImageHistograms2 extends PApplet {
     private int xOffset, yOffset;
     private Random random = new Random();
     private FontLoader fontLoader = new FontLoader();
-    private static String imageName = "image6.jpg";
+    private static String imageName = "src/main/resources/image6.jpg";
     private int backgroundColor = 80;
     private PApplet context = this;
 

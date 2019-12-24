@@ -23,7 +23,7 @@ public class Tesselation1 extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("flower.jpg");
+        img = loadImage("src/main/resources/flower.jpg");
         size(img.width, img.height);
         outputWidth = img.width;
         outputHeight = img.height;

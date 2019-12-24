@@ -23,7 +23,7 @@ public class StripedImage extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("monalisa.jpg");
+        img = loadImage("src/main/resources/monalisa.jpg");
         size(img.width, img.height);
         pixelDensity(1);
         smooth(8);

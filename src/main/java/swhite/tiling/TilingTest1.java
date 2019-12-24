@@ -21,7 +21,7 @@ public class TilingTest1 extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("monalisa.jpg");
+        img = loadImage("src/main/resources/monalisa.jpg");
         size(outputWidth, outputHeight);
         pixelDensity(1);
         smooth(8);

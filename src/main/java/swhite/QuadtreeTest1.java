@@ -21,7 +21,7 @@ public class QuadtreeTest1 extends PApplet {
 
     @Override
     public void settings() {
-        img = loadImage("image3.jpg");
+        img = loadImage("src/main/resources/image3.jpg");
         size(img.width, img.height);
         pixelDensity(1);
         smooth(8);
